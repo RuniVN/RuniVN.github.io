@@ -7,24 +7,24 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <meta property="og:title" content=" Viết một facebook messenger bot đơn giản cùng Go &#43; ngrok &middot;  Runi blog" />
+        <meta property="og:title" content=" Goroutine under the hood &middot;  Runi blog" />
         <meta property="og:site_name" content="Runi blog" />
-        <meta property="og:url" content="https://runivn.github.io/post/go-facebook-bot/" />
+        <meta property="og:url" content="https://runivn.github.io/post/go-routine-under-the-hood/" />
 
     
         <meta property="og:type" content="article" />
-        <meta property="og:article:published_time" content="2016-08-18T16:45:32&#43;07:00" />
+        <meta property="og:article:published_time" content="2017-03-28T16:45:32&#43;07:00" />
         
 
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@" />
         <meta name="twitter:creator" content="@" />
-        <meta name="twitter:title" content="Viết một facebook messenger bot đơn giản cùng Go &#43; ngrok" />
+        <meta name="twitter:title" content="Goroutine under the hood" />
         <meta name="twitter:description" content="" />
-        <meta name="twitter:url" content="https://runivn.github.io/post/go-facebook-bot/" />
+        <meta name="twitter:url" content="https://runivn.github.io/post/go-routine-under-the-hood/" />
     
 
-        <title> Viết một facebook messenger bot đơn giản cùng Go &#43; ngrok &middot;  Runi blog</title>
+        <title> Goroutine under the hood &middot;  Runi blog</title>
 
     
         <meta name="description" content="" />
@@ -43,21 +43,21 @@
     
 
     
-        <link rel="canonical" href="https://runivn.github.io/post/go-facebook-bot/" />
+        <link rel="canonical" href="https://runivn.github.io/post/go-routine-under-the-hood/" />
 
     
     <script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "Article",
-        "headline": "Viết một facebook messenger bot đơn giản cùng Go \x2b ngrok",
+        "headline": "Goroutine under the hood",
         "author": {
             "@type": "Person",
             "name": "http://profiles.google.com/?rel=author"
         },
-        "datePublished": "2016-08-18",
+        "datePublished": "2017-03-28",
         "description": "",
-        "wordCount":  756 
+        "wordCount":  1744 
     }
     </script>
     
@@ -88,197 +88,177 @@
 
 <article id="" class="post">
     <div class="post-stamp">
-        <time datetime="2016-08-18T16:45:32&#43;07:00">
-            18 Aug 2016
+        <time datetime="2017-03-28T16:45:32&#43;07:00">
+            28 Mar 2017
         </time>
         <span class="taglist">
         
         </span>
     </div>
-    <h1 class="post-title">Viết một facebook messenger bot đơn giản cùng Go &#43; ngrok</h1>
+    <h1 class="post-title">Goroutine under the hood</h1>
     
 
-<p>Messenger bots của facebook ra cũng khá lâu rồi. Đã có nhiều người sử dụng cho page facebook của mình. Bài này của mình sẽ hướng dẫn các bạn viết 1 con bot tự động trả lời theo pattern có sẵn bằng Go - cho server và ngrok - để publish localhost ra ngoài.</p>
+<p>Chắc các bạn cũng không lạ lẫm gì Go nữa, Go là một ngôn ngữ backend được phát triển bởi Google.</p>
 
-<p>Kiểu này:</p>
+<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/h46t11xlnx_blob" alt="alt text" />
+Một vài điểm mạnh nổi bật trong Go:
+- Static binaries
+- Concurrency
+- High performance</p>
 
-<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg" class="img-center" /></p>
+<p>Trong đó concurrency được coi là first class citizen. Trong bài này mình sẽ đi sâu vào goroutines và cơ chế hoạt động của nó.</p>
 
-<p>Những thứ bạn cần có:</p>
+<h1 id="một-ít-kiến-thức-căn-bản">Một ít kiến thức căn bản</h1>
+
+<p>###Phân biệt parallelism và concurrenncy:
+Cả hai đều là cách để thực hiện multi processing programming, nhưng:</p>
 
 <ul>
-<li>Một page facebook</li>
-<li>Nhiêu đủ rồi</li>
+<li>Concurrency là việc handle nhiều thứ cùng một lúc. Thử tưởng tượng bạn đang tung bóng và bắt bóng trên tay, bạn có 4 quả bóng, nhưng một lúc bạn chỉ có thể tung một quả bằng tay phải, giữ một quả bằng tay trái và hai quả còn lại ở trên bầu trời.</li>
+<li>Parallelism là việc nhiều tác vụ đang chạy cùng một lúc(ví dụ multi processor). Bạn có thể vừa giặt đồ, vừa đọc sách, 2 tác vụ này chạy song song với nhau và không cần xài chung tài nguyên gì.</li>
 </ul>
 
-<h1 id="facebook-stuffs">Facebook stuffs</h1>
+<h3 id="phân-biệt-preemptive-scheduling-và-cooperative-scheduling">Phân biệt preemptive scheduling và cooperative scheduling:</h3>
 
-<p>Đầu tiên bạn vào <a href="https://developers.facebook.com">https://developers.facebook.com</a> và chọn app của mình.</p>
+<p>Tại mỗi thời điểm chỉ có một process được thực thi, vì vậy sẽ có nhiều loại scheduling CPU sao cho đạt hiệu quả tùy mục đích sử dụng nhất.
+ - Preemptive scheduling là khi các process sẵn sàng nhường quyền điều khiển CPU.
+ - Cooperative(hay còn gọi là non premptive): Khi một process được điều phối CPU, nó sẽ sử dụng CPU cho đến khi nó giải phóng(bằng cách kết thúc hoặc qua next state).</p>
 
-<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e" class="img-center"/></p>
+<p>###Phân biệt process, thread và goroutine:</p>
 
-<p>Ở tab bên trái các bạn <code>Add Product</code>. Chọn <code>Webhooks</code>, và <code>New Subscription</code> và chọn <code>Page</code> ở dropdown. Sẽ hiện ra cái popup như này:</p>
+<ul>
+<li>Process hiểu nôm na là một tiến trình xử lý của máy tính. Thuở xa xưa, máy tính chỉ chạy được một process trong một thời điểm. Khi multi processing ra đời, <a href="https://en.wikipedia.org/wiki/Time-sharing">time sharing model</a> trở nên phổ biến. Mỗi process sẽ cung cấp resource riêng biệt để thực hiện chương trình.</li>
+</ul>
 
-<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.51.56%20PM.png_4suocqh1zi" class="img-center"/></p>
+<p>Time sharing là một cách để share resource của máy tính cho các process, hay nói cách khác là các process có thể đồng thời làm việc trên một single core computer.</p>
 
-<p>Ở đây mình chỉ chọn subscription field là <code>messages</code>.</p>
+<p>Nói vậy thôi, nhưng nó chỉ là &ldquo;ảo ảnh&rdquo; của concurrency. Thực chất trong đó là việc switch sự phân bố của CPU rất nhanh giữa các active process với nhau. Để làm được chuyện đó cần phải lưu lại state của một process, và khởi động lại state của một process khác.</p>
 
-<p>Để có thể lưu cái subscription này lại, bạn cần một <code>Callback URL</code> và một <code>Verify token</code></p>
+<p>Đó chính là context switching.</p>
 
-<p>Callback URL là nơi mà messenger sẽ gửi data khi nhận được message trên page của facebook.
-Ở đây mình sẽ sử dụng Go làm server, chạy trên localhost. Sau đó dùng ngrok publish ra một https URL(vì Callback URL facebook chỉ nhận https)</p>
+<p>Context switching cost cho các process rất nặng nề, bao gồm việc phải store tất cả register của CPU.</p>
 
-<p>Verify token thì bạn điền token mà mình muốn verify lại 1 lần nữa(sử dụng trong Go server để double check)</p>
+<ul>
+<li>Thấy nặng nề quá nên đẻ ra thằng thread. Thread thật ra giống y chang process, nhưng nó là thực thể nằm trong process, và được cái là cho phép share resource. Process này không thể xài chung tài nguyên với process khác, nhưng thread trong cùng một process có thể xài chung tài nguyên với nhau.</li>
+</ul>
 
-<p>Ta da! Để cái popup này lại đấy, chuyển sang viết server.</p>
+<p>Tuy vậy, cost để context switching giữa các thread còn khá cao, vì mỗi thread cũng chứa rất nhiều state.</p>
 
-<h1 id="go-server">Go server</h1>
+<ul>
+<li>Goroutine lấy ý tưởng của thread và phát huy. Thử tìm hiểu xem sao.</li>
+</ul>
 
-<p>Tạo 1 file <code>main.go</code>.</p>
+<h1 id="goroutine">Goroutine</h1>
 
-<p>Viết hàm main cho nó, làm nhiệm vụ là serve ở port 8085 một cái webhook.</p>
+<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/fy6g2oyuqm_blob" alt="alt text" /></p>
 
-<pre><code>func main() {
-	http.HandleFunc(&quot;/webhook&quot;, webhookHandler)
-	http.ListenAndServe(&quot;:8085&quot;, nil)
-}
+<p>Các bạn hiểu nôm na một goroutine là một function mà có thể chạy đồng thời với các function khác. Các goroutine share nhau address space.
+Không khác gì thread nhỉ?</p>
 
-</code></pre>
+<p>Một số đặc điểm goroutine:
+- Goroutine là cooperative.
+- Compiler sẽ biết register nào được sử dụng vào tự động lưu nó
+- Context switch của Goroutine xảy ra ở 2 thời điểm: khi một go routine đang chờ data để xử lý (channel operation) hoặc cần thêm space để nhét data (IO, GC).</p>
 
-<p>Viết hàm <code>webhookHandler</code></p>
+<h1 id="so-sánh-goroutine-và-thread">So sánh goroutine và thread</h1>
 
-<pre><code>func webhookHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == &quot;GET&quot; {
-		verifyTokenAction(w, r)
-	}
-	if r.Method == &quot;POST&quot; {
-		webhookPostAction(w, r)
-	}
-}
-</code></pre>
+<ul>
+<li>Về bộ nhớ: Bạn khởi tạo một goroutine chỉ mất 4Kb stack trong khi khởi tạo một thread thì lại cần từ 1- 4Mb. =&gt; Dùng goroutine để multiplex request cho server vô cùng đơn giản khi bạn có thể spawn cả chục nghìn go routine, còn nếu 1 thread - 1 request thì rất dễ dẫn tới out of memory.</li>
+<li>Setup/teardown cost: Thread sẽ expensive trong việc này vì bạn phải request OS resource và trả lại khi dùng xong(thường cách hay dùng sẽ là thread pool để hạn chế việc này). Còn với goroutine thì việc khởi tạo/hủy đều thực hiện ở run time và cost cho việc này rất rẻ.</li>
+<li>Context switching: Thread sử dụng preemptive scheduling, khi switch phải save/restore 16 registers trong khi Go routine sử dụng cooperative và chỉ cần 3 register(PC, DX, SP).</li>
+</ul>
 
-<p>Tại sao lại có 2 hàm GET và POST ở đây? GET sẽ được gọi khi bạn bấm nút <code>Verify and Save</code> ở popup phía trên. Còn POST sẽ được gọi khi có ai đó nhắn tin trên facebook page. Với GET thì mình chỉ check xem có gửi đúng <code>verifyToken</code> không, và log ra thôi.</p>
+<h1 id="multiplex-goroutine">Multiplex goroutine</h1>
 
-<pre><code>func verifyTokenAction(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Query().Get(&quot;hub.verify_token&quot;) == verifyToken {
-		log.Print(&quot;verify token success.&quot;)
-		fmt.Fprintf(w, r.URL.Query().Get(&quot;hub.challenge&quot;))
-	} else {
-		log.Print(&quot;Error: verify token failed.&quot;)
-		fmt.Fprintf(w, &quot;Error, wrong validation token&quot;)
-	}
-}
-</code></pre>
+<p>Bởi vì Goroutine là cooperative, nên OS gần như không còn dính dáng tới việc đưa ra quyết định schedule. Đảm nhận việc này là Go scheduler.</p>
 
-<p>Quan trọng là xử lý hàm POST:</p>
+<p>Có 3 model cơ bản trong multi threading. Đó là N:1, 1:1 và N:M
+- N:1(user space thread) là khi có nhiều thread chạy trên cùng một OS thread. Cùng một OS thread thì cho phép việc context switch rất nhanh, nhưng lại không thể tận dụng được multi core system. Tức là trong một lúc chỉ có một thread được execute, như vậy nếu 1 thread đang bị block bởi IO, thì mấy thread khác cũng không thể làm gì được.
+- 1:1(kernel thread) là 1 thread sẽ gắn với một OS thread. Cái này thì multi core được, nhưng context switch lại expensive.
+- N:M, đây là cách của Go sử dụng, chắc các bạn cũng đoán được, đó là N go routines sẽ chạy được trên M OS thread. Như vậy sẽ vừa quick context switch vừa tận dụng được multi core. Cơ mà để làm được như vậy, thì Go scheduler phải tay to, và xử lý cực kì phức tạp.</p>
 
-<pre><code>func webhookPostAction(w http.ResponseWriter, r *http.Request) {
-	var receivedMessage ReceivedMessage
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Print(err)
-	}
-	if err = json.Unmarshal(body, &amp;receivedMessage); err != nil {
-		log.Print(err)
-	}
-	messagingEvents := receivedMessage.Entry[0].Messaging
-	for _, event := range messagingEvents {
-		senderID := event.Sender.ID
-		if &amp;event.Message != nil &amp;&amp; event.Message.Text != &quot;&quot; {
-			message := getReplyMessage(event.Message.Text)
-			sendTextMessage(senderID, message)
-		}
-	}
-	fmt.Fprintf(w, &quot;Success&quot;)
-}
-func getReplyMessage(receivedMessage string) string {
-	var message string
-	receivedMessage = strings.ToUpper(receivedMessage)
-	log.Print(&quot; Received message: &quot; + receivedMessage)
+<h1 id="go-scheduler">Go scheduler</h1>
 
-    if strings.Contains(receivedMessage, &quot;HELLO&quot;) {
-		message = &quot;Hi, my name is Annie. Nice to meet you&quot;
-	}
+<p>Trong Go scheduler sẽ có 3 thực thể. M P G
+<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/7tt20uu4gq_blob" alt="alt text" /></p>
 
-	return message
-}
+<p>M đại diện cho OS thread.(machine)</p>
 
-func sendTextMessage(senderID string, text string) {
-	recipient := new(Recipient)
-	recipient.ID = senderID
-	sendMessage := new(SendMessage)
-	sendMessage.Recipient = *recipient
-	sendMessage.Message.Text = text
-	sendMessageBody, err := json.Marshal(sendMessage)
-	if err != nil {
-		log.Print(err)
-	}
-	req, err := http.NewRequest(&quot;POST&quot;, FacebookEndPoint, bytes.NewBuffer(sendMessageBody))
-	if err != nil {
-		log.Print(err)
-	}
-	fmt.Println(&quot;%T&quot;, req)
-	fmt.Println(&quot;%T&quot;, err)
+<p>P là processor, nó sẽ giữ context tương ứng với một OS thread.</p>
 
-	values := url.Values{}
-	values.Add(&quot;access_token&quot;, accessToken)
-	req.URL.RawQuery = values.Encode()
-	req.Header.Add(&quot;Content-Type&quot;, &quot;application/json; charset=UTF-8&quot;)
-	client := &amp;http.Client{Timeout: time.Duration(30 * time.Second)}
-	res, err := client.Do(req)
-	if err != nil {
-		log.Print(err)
-	}
-	defer res.Body.Close()
-	var result map[string]interface{}
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Print(err)
-	}
-	if err := json.Unmarshal(body, &amp;result); err != nil {
-		log.Print(err)
-	}
-	log.Print(result)
-}
-</code></pre>
+<p>G là goroutine.</p>
 
-<p>Hàm trên có 2 hàm:
-- <code>getReplyMessage</code>: Ở đây mình chỉ xem thử nếu có chữ hello thì mình sẽ trả về message greeting tương ứng. Các bạn có thể sử dụng các kĩ thuật khác cao cấp hơn.
-- <code>sendTextMessage</code>: Hàm này sẽ gửi về POST request về facebook endpoint, sau đó facebook sẽ gửi tin nhắn tới người nhận(người vừa mới chat trên page facebook).</p>
+<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/ndz0upn5ir_blob" alt="alt text" /></p>
 
-<p>Chạy server lên bằng <code>go run main.go</code>. Ta được một server đang chạy ở port 8085</p>
+<p>Trên hình trên chúng ta thấy được 2 M, có giữ context P, mỗi cái sẽ chạy một goroutine G (Lưu ý là để chạy goroutine, M phải giữ context P)</p>
 
-<h1 id="ngrok">Ngrok</h1>
+<p>G màu xám là những go routine đang pending, và sẵn sàng để được schedule. Mỗi context P sẽ nắm giữ một list G màu xám như vậy. Cứ mỗi <code>go</code> statement được chạy, nó sẽ được add vào run queue. Khi tới thời điểm, context sẽ pop một goroutine ra, allocate cho nó lên stack, set cho nó một instruction pointer và cho nó chạy.</p>
 
-<p>Các bạn tải ngrok về ở đây <a href="https://ngrok.com/">https://ngrok.com/</a></p>
+<p>M và G hẳn là đã rõ rồi, cơ mà P ở đây vai trò là gì? Tại sao không gắn thẳng goroutine vào thread mà phải thông qua context?</p>
 
-<p>Chạy ngrok:</p>
+<p>Nó sẽ rơi vào trường hợp sau đây, đó là khi thread đang chạy bị block. Nguyên nhân gây ra block có thể là IO hay GC.
+Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian block, go scheduler sẽ pass context này cho thread khác để có thể tiếp tục chạy.
+<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/djsaexr43v_blob" alt="alt text" /></p>
 
-<pre><code>ngrok http 8085
-</code></pre>
+<p>Như hình trên, M0 đang handling một cái syscall, điều này làm những goroutine trong running queue sẽ ko được schedule, nên Go scheduler sẽ pass context P cho M1. Lưu ý là M1 có thể được tạo ra trong lúc đó, hoặc lấy ra từ thread cache.</p>
 
-<p>Sẽ được như này:</p>
+<p>Khi M0 làm xong syscall, thì nó sẽ:
+- Tìm kiếm xung quanh, bằng cách chôm <sup>1</sup>&frasl;<sub>2</sub> goroutine run queue của thread khác
+- Nếu không tìm thấy gì, nó sẽ đặt mình vào thread cache và ngủ.</p>
 
-<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%202.39.47%20PM.png_95j7zf1bgb" class="img-center"/></p>
+<h1 id="tại-sao-goroutine-lại-nhẹ-như-vậy">Tại sao Goroutine lại nhẹ như vậy?</h1>
 
-<p><code>localhost:8085</code> đã được ngrok chuyển thành <code>https</code> và publish ra bên ngoài.</p>
+<p>Để khởi tạo goroutine chỉ mất tầm 4KB trong khi bạn cần 4Mb để có thể tạo ra một thread.</p>
 
-<h1 id="config">Config</h1>
+<p>Lí do là Goroutine có thể tăng/giảm kích thước khi cần trong lúc runtime(dynamic allocation).
+<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/5nb52d9gmf_blob" alt="alt text" /></p>
 
-<p>Mọi thứ gần như đã xong. Các bạn chỉ cần paste callback URL đã được forward bởi ngrok vào popup của facebook lúc nãy, điền verify token là xong rồi.</p>
+<p>Go sử dụng segmented stacks. Cho các bạn chưa biết thì segmented stacks là loại stack mà cho phép tăng/giảm stack space tùy vào mục đích sử dụng, và quá trình này thực hiện ở runtime.</p>
 
-<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%202.43.19%20PM.png_oe8usmiac8" class="img-center"/></p>
+<p>Quá trình tăng stack khi cần thiết của một go routine sẽ thực hiện như sau:
+- Một go routine khi init sẽ có 4KB space
+- Nếu quá tải, Go runtime sẽ allocate thêm stack. Việc quản lý một function có run out of memory hay không được thực hiện bởi <code>prologue</code>. Mỗi function đều có một prologue để quản lý bộ nhớ.</p>
 
-<p>Như vậy là các bạn có thể pm facebook page chat thử và chờ response.</p>
+<h1 id="goroutine-blocking">Goroutine blocking</h1>
 
-<h1 id="kết">Kết</h1>
+<p>Goroutine sẽ bị block trong các trường hợp sau:
+- Network
+- Sleep
+- Channel operations</p>
 
-<p>Trên này là một sample đơn giản. Facebook messenger bots có rất nhiều tiềm năng trong lĩnh vực bán hàng hay trả lời tự động. Các bạn nào chưa nghịch thì có thể nghịch thử.</p>
+<p>Khi một goroutine bị block, nó sẽ không khiến thread mà nó đang nằm trên bị ảnh hưởng theo.</p>
+
+<p>Nếu các bạn để ý, goroutines giống như một lớp abstraction của thread. Nó giúp programmer không phải làm việc trực tiếp với threads, và OS thì hầu như không biết sự tồn tại của go routine.
+<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/mhqrpx4uab_Screen%20Shot%202017-03-28%20at%205.06.11%20PM.png" alt="alt text" /></p>
+
+<p>Cái mà OS thấy chỉ đơn giản là một process ở user level xin được cấp phát và chạy multiple threads. Việc schedule goroutines trên threads tất tần tật chỉ đơn thuần là việc xây dựng một môi trường ảo ở runtime.</p>
+
+<p>Tất cả I/O trong Go đều là blocking. Vậy xử lý những tác vụ async như network I/O thì như thế nào?</p>
+
+<p>Để giải quyết vấn đề async IO thì trong Go sẽ có một phần để convert từ non-blocking sang blocking I/O. Phần này gọi là <code>netpoller</code>. Công việc nó là nó sẽ ngồi và đợi events từ các goroutines mà muốn thực hiện network I/O, sau đó dựa vào tập file descriptor từ OS để quyết định goroutines nào sẽ được perform I/O.</p>
+
+<h1 id="q-a">Q&amp;A</h1>
+
+<p>Q: Tuy context switch của goroutines rẻ, nhưng mà giờ có cả triệu goroutines thì nó cũng chậm chứ?
+A: Hỏi hay đấy, nhưng go scheduler cũng giống thread scheduler. Với các OS ngày nay thì độ phức tạp của scheduling algo là O(1). Nên việc có bao nhiêu goroutines không ảnh hưởng tới context switch cost.</p>
+
+<p>Q: Ủa sao cái blocking goroutine mechanism của netpoller nhìn giống giống epoll/kqueue trong Unix vậy.
+A: Pro ghê, cách mà goroutines được xử lý khi bị blocking khá giống với event driven trong C. Thật ra under the hood thì Go cũng sử dụng epoll/kqueue luôn. Bạn có thể đọc source Go ở <a href="https://golang.org/src/runtime/netpoll.go">netpoller</a> để tìm hiểu thêm.</p>
+
+<h1 id="nguồn">Nguồn</h1>
+
+<ol>
+<li>Analysis of the Go runtime scheduler - <a href="http://www.cs.columbia.edu/~aho/cs6998/reports/12-12-11_DeshpandeSponslerWeiss_GO.pdf">http://www.cs.columbia.edu/~aho/cs6998/reports/12-12-11_DeshpandeSponslerWeiss_GO.pdf</a></li>
+<li>The Go net poller - <a href="https://morsmachine.dk/netpoller">https://morsmachine.dk/netpoller</a></li>
+<li>The Go scheduler - <a href="https://morsmachine.dk/go-scheduler">https://morsmachine.dk/go-scheduler</a></li>
+<li>Why Go routines stack infinite - <a href="https://dave.cheney.net/2013/06/02/why-is-a-goroutines-stack-infinite">https://dave.cheney.net/2013/06/02/why-is-a-goroutines-stack-infinite</a></li>
+<li>How Go routines work - <a href="http://blog.nindalf.com/how-goroutines-work/">http://blog.nindalf.com/how-goroutines-work/</a></li>
+</ol>
 
     <div id="social-bar">
 	<ul class="rrssb-buttons clearfix">
       <li class="email">
-          <a href="mailto:?subject=Vi%e1%ba%bft%20m%e1%bb%99t%20facebook%20messenger%20bot%20%c4%91%c6%a1n%20gi%e1%ba%a3n%20c%c3%b9ng%20Go%20%2b%20ngrok&amp;body=https://runivn.github.io/post/go-facebook-bot/">
+          <a href="mailto:?subject=Goroutine%20under%20the%20hood&amp;body=https://runivn.github.io/post/go-routine-under-the-hood/">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path transform="scale(0.014,-0.014) translate(0,-1670)" d="M1792 826v-794q0 -66 -47 -113t-113 -47h-1472q-66 0 -113 47t-47 113v794q44 -49 101 -87q362 -246 497 -345q57 -42 92.5 -65.5t94.5 -48t110 -24.5h1h1q51 0 110 24.5t94.5 48t92.5 65.5q170 123 498 345q57 39 100 87zM1792 1120q0 -79 -49 -151t-122 -123 q-376 -261 -468 -325q-10 -7 -42.5 -30.5t-54 -38t-52 -32.5t-57.5 -27t-50 -9h-1h-1q-23 0 -50 9t-57.5 27t-52 32.5t-54 38t-42.5 30.5q-91 64 -262 182.5t-205 142.5q-62 42 -117 115.5t-55 136.5q0 78 41.5 130t118.5 52h1472q65 0 112.5 -47t47.5 -113z"/>
@@ -288,7 +268,7 @@ func sendTextMessage(senderID string, text string) {
           </a>
       </li>
       <li class="facebook">
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://runivn.github.io/post/go-facebook-bot/" class="popup">
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://runivn.github.io/post/go-routine-under-the-hood/" class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path d="M27.825,4.783c0-2.427-2.182-4.608-4.608-4.608H4.783c-2.422,0-4.608,2.182-4.608,4.608v18.434 c0,2.427,2.181,4.608,4.608,4.608H14V17.379h-3.379v-4.608H14v-1.795c0-3.089,2.335-5.885,5.192-5.885h3.718v4.608h-3.726 c-0.408,0-0.884,0.492-0.884,1.236v1.836h4.609v4.608h-4.609v10.446h4.916c2.422,0,4.608-2.188,4.608-4.608V4.783z"/>
@@ -298,7 +278,7 @@ func sendTextMessage(senderID string, text string) {
           </a>
       </li>
 			<li class="twitter">
-          <a href="http://twitter.com/home?status=Vi%e1%ba%bft%20m%e1%bb%99t%20facebook%20messenger%20bot%20%c4%91%c6%a1n%20gi%e1%ba%a3n%20c%c3%b9ng%20Go%20%2b%20ngrok%20https://runivn.github.io/post/go-facebook-bot/" class="popup">
+          <a href="http://twitter.com/home?status=Goroutine%20under%20the%20hood%20https://runivn.github.io/post/go-routine-under-the-hood/" class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 		                  <path d="M24.253,8.756C24.689,17.08,18.297,24.182,9.97,24.62c-3.122,0.162-6.219-0.646-8.861-2.32 c2.703,0.179,5.376-0.648,7.508-2.321c-2.072-0.247-3.818-1.661-4.489-3.638c0.801,0.128,1.62,0.076,2.399-0.155 C4.045,15.72,2.215,13.6,2.115,11.077c0.688,0.275,1.426,0.407,2.168,0.386c-2.135-1.65-2.729-4.621-1.394-6.965 C5.575,7.816,9.54,9.84,13.803,10.071c-0.842-2.739,0.694-5.64,3.434-6.482c2.018-0.623,4.212,0.044,5.546,1.683 c1.186-0.213,2.318-0.662,3.329-1.317c-0.385,1.256-1.247,2.312-2.399,2.942c1.048-0.106,2.069-0.394,3.019-0.851 C26.275,7.229,25.39,8.196,24.253,8.756z"/>
@@ -308,7 +288,7 @@ func sendTextMessage(senderID string, text string) {
           </a>
       </li>
 			<li class="linkedin">
-          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/go-facebook-bot/&amp;title=Vi%e1%ba%bft%20m%e1%bb%99t%20facebook%20messenger%20bot%20%c4%91%c6%a1n%20gi%e1%ba%a3n%20c%c3%b9ng%20Go%20%2b%20ngrok&amp;summary=Messenger%20bots%20c%e1%bb%a7a%20facebook%20ra%20c%c5%a9ng%20kh%c3%a1%20l%c3%a2u%20r%e1%bb%93i.%20%c4%90%c3%a3%20c%c3%b3%20nhi%e1%bb%81u%20ng%c6%b0%e1%bb%9di%20s%e1%bb%ad%20d%e1%bb%a5ng%20cho%20page%20facebook%20c%e1%bb%a7a%20m%c3%acnh.%20B%c3%a0i%20n%c3%a0y%20c%e1%bb%a7a%20m%c3%acnh%20s%e1%ba%bd%20h%c6%b0%e1%bb%9bng%20d%e1%ba%abn%20c%c3%a1c%20b%e1%ba%a1n%20vi%e1%ba%bft%201%20con%20bot%20t%e1%bb%b1%20%c4%91%e1%bb%99ng%20tr%e1%ba%a3%20l%e1%bb%9di%20theo%20pattern%20c%c3%b3%20s%e1%ba%b5n%20b%e1%ba%b1ng%20Go%20-%20cho%20server%20v%c3%a0%20ngrok%20-%20%c4%91%e1%bb%83%20publish%20localhost%20ra%20ngo%c3%a0i.%0aKi%e1%bb%83u%20n%c3%a0y%3a%0aNh%e1%bb%afng%20th%e1%bb%a9%20b%e1%ba%a1n%20c%e1%ba%a7n%20c%c3%b3%3a%0a%20M%e1%bb%99t%20page%20facebook%20Nhi%c3%aau%20%c4%91%e1%bb%a7%20r%e1%bb%93i%20%20Facebook%20stuffs%20%c4%90%e1%ba%a7u%20ti%c3%aan%20b%e1%ba%a1n%20v%c3%a0o%20https%3a%2f%2fdevelopers...." class="popup">
+          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/go-routine-under-the-hood/&amp;title=Goroutine%20under%20the%20hood&amp;summary=Ch%e1%ba%afc%20c%c3%a1c%20b%e1%ba%a1n%20c%c5%a9ng%20kh%c3%b4ng%20l%e1%ba%a1%20l%e1%ba%abm%20g%c3%ac%20Go%20n%e1%bb%afa%2c%20Go%20l%c3%a0%20m%e1%bb%99t%20ng%c3%b4n%20ng%e1%bb%af%20backend%20%c4%91%c6%b0%e1%bb%a3c%20ph%c3%a1t%20tri%e1%bb%83n%20b%e1%bb%9fi%20Google.%0aM%e1%bb%99t%20v%c3%a0i%20%c4%91i%e1%bb%83m%20m%e1%ba%a1nh%20n%e1%bb%95i%20b%e1%ba%adt%20trong%20Go%3a%20-%20Static%20binaries%20-%20Concurrency%20-%20High%20performance%0aTrong%20%c4%91%c3%b3%20concurrency%20%c4%91%c6%b0%e1%bb%a3c%20coi%20l%c3%a0%20first%20class%20citizen.%20Trong%20b%c3%a0i%20n%c3%a0y%20m%c3%acnh%20s%e1%ba%bd%20%c4%91i%20s%c3%a2u%20v%c3%a0o%20goroutines%20v%c3%a0%20c%c6%a1%20ch%e1%ba%bf%20ho%e1%ba%a1t%20%c4%91%e1%bb%99ng%20c%e1%bb%a7a%20n%c3%b3.%0aM%e1%bb%99t%20%c3%adt%20ki%e1%ba%bfn%20th%e1%bb%a9c%20c%c4%83n%20b%e1%ba%a3n%20%23%23%23Ph%c3%a2n%20bi%e1%bb%87t%20parallelism%20v%c3%a0%20concurrenncy%3a%20C%e1%ba%a3%20hai%20%c4%91%e1%bb%81u%20l%c3%a0%20c%c3%a1ch%20%c4%91%e1%bb%83%20th%e1%bb%b1c%20hi%e1%bb%87n%20multi%20processing%20programming%2c%20nh%c6%b0ng%3a..." class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path d="M25.424,15.887v8.447h-4.896v-7.882c0-1.979-0.709-3.331-2.48-3.331c-1.354,0-2.158,0.911-2.514,1.803 c-0.129,0.315-0.162,0.753-0.162,1.194v8.216h-4.899c0,0,0.066-13.349,0-14.731h4.899v2.088c-0.01,0.016-0.023,0.032-0.033,0.048 h0.033V11.69c0.65-1.002,1.812-2.435,4.414-2.435C23.008,9.254,25.424,11.361,25.424,15.887z M5.348,2.501 c-1.676,0-2.772,1.092-2.772,2.539c0,1.421,1.066,2.538,2.717,2.546h0.032c1.709,0,2.771-1.132,2.771-2.546 C8.054,3.593,7.019,2.501,5.343,2.501H5.348z M2.867,24.334h4.897V9.603H2.867V24.334z"/>
@@ -319,7 +299,7 @@ func sendTextMessage(senderID string, text string) {
       </li>
       <li class="tumblr">
 					<script>
-						document.write('<a href="http://www.tumblr.com/share?v=3&amp;u=' + encodeURIComponent('https:\/\/runivn.github.io\/post\/go-facebook-bot\/') + '&amp;t=Viết một facebook messenger bot đơn giản cùng Go \x2b ngrok" class="popup">');
+						document.write('<a href="http://www.tumblr.com/share?v=3&amp;u=' + encodeURIComponent('https:\/\/runivn.github.io\/post\/go-routine-under-the-hood\/') + '&amp;t=Goroutine under the hood" class="popup">');
 					</script>
               <span class="icon">
                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
@@ -330,7 +310,7 @@ func sendTextMessage(senderID string, text string) {
           <script>document.write('</a>');</script>
       </li>
       <li class="reddit">
-          <a href="http://www.reddit.com/submit?url=https://runivn.github.io/post/go-facebook-bot/">
+          <a href="http://www.reddit.com/submit?url=https://runivn.github.io/post/go-routine-under-the-hood/">
               <span class="icon">
                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 											<g>
@@ -345,7 +325,7 @@ func sendTextMessage(senderID string, text string) {
           </a>
       </li>
       <li class="googleplus">
-          <a href="https://plus.google.com/share?url=https://runivn.github.io/post/go-facebook-bot/" class="popup">
+          <a href="https://plus.google.com/share?url=https://runivn.github.io/post/go-routine-under-the-hood/" class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <g>
@@ -364,7 +344,7 @@ func sendTextMessage(senderID string, text string) {
 						if (firstimg !== undefined) {
 							imgurl = firstimg.src;
 						}
-						document.write('<a href="http://pinterest.com/pin/create/button/?url=https:\/\/runivn.github.io\/post\/go-facebook-bot\/&amp;media=' + imgurl + '&amp;description=Viết một facebook messenger bot đơn giản cùng Go \x2b ngrok" class="popup">');
+						document.write('<a href="http://pinterest.com/pin/create/button/?url=https:\/\/runivn.github.io\/post\/go-routine-under-the-hood\/&amp;media=' + imgurl + '&amp;description=Goroutine under the hood" class="popup">');
 					</script>
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
@@ -375,7 +355,7 @@ func sendTextMessage(senderID string, text string) {
           <script>document.write('</a>');</script>
       </li>
       <li class="pocket">
-          <a href="https://getpocket.com/save?url=https://runivn.github.io/post/go-facebook-bot/"  class="popup">
+          <a href="https://getpocket.com/save?url=https://runivn.github.io/post/go-routine-under-the-hood/"  class="popup">
               <span class="icon">
                   <svg width="32px" height="28px" viewBox="0 0 32 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
                       <path d="M28.7817528,0.00172488695 C30.8117487,0.00431221738 31.9749312,1.12074529 31.9644402,3.10781507 C31.942147,6.67703739 32.1336065,10.2669583 31.8057648,13.8090137 C30.7147076,25.5813672 17.2181194,31.8996281 7.20714461,25.3808491 C2.71833574,22.4571656 0.196577202,18.3122624 0.0549495772,12.9357897 C-0.0342233715,9.5774348 0.00642900214,6.21519891 0.0300336062,2.85555035 C0.0405245414,1.1129833 1.21157517,0.0146615391 3.01995012,0.00819321302 C7.34746087,-0.00603710433 11.6775944,0.00431221738 16.0064164,0.00172488695 C20.2644248,0.00172488695 24.5237444,-0.00215610869 28.7817528,0.00172488695 L28.7817528,0.00172488695 Z M8.64885184,7.85611511 C7.38773662,7.99113854 6.66148108,8.42606978 6.29310958,9.33228474 C5.90114134,10.2969233 6.17774769,11.1421181 6.89875951,11.8276216 C9.35282156,14.161969 11.8108164,16.4924215 14.2976518,18.7943114 C15.3844131,19.7966007 16.5354102,19.7836177 17.6116843,18.7813283 C20.0185529,16.5495467 22.4070683,14.2982907 24.7824746,12.0327533 C25.9845979,10.8850542 26.1012707,9.56468083 25.1469132,8.60653379 C24.1361858,7.59255976 22.8449191,7.6743528 21.5890476,8.85191291 C19.9936451,10.3488554 18.3680912,11.8172352 16.8395462,13.3777945 C16.1342655,14.093159 15.7200114,14.0048744 15.0566806,13.3440386 C13.4599671,11.7484252 11.8081945,10.2060421 10.1262706,8.70001155 C9.65564653,8.27936164 9.00411403,8.05345704 8.64885184,7.85611511 L8.64885184,7.85611511 L8.64885184,7.85611511 Z"></path>
