@@ -34,11 +34,11 @@
 
 &lt;p&gt;Đầu tiên bạn vào &lt;a href=&#34;https://developers.facebook.com&#34;&gt;https://developers.facebook.com&lt;/a&gt; và chọn app của mình.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e&#34; class=&#34;img-center&#34; title=&#34;Steve Francia&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e&#34; class=&#34;img-center&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Ở tab bên trái các bạn &lt;code&gt;Add Product&lt;/code&gt;. Chọn &lt;code&gt;Webhooks&lt;/code&gt;, và &lt;code&gt;New Subscription&lt;/code&gt; và chọn &lt;code&gt;Page&lt;/code&gt; ở dropdown. Sẽ hiện ra cái popup như này:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.51.56%20PM.png_4suocqh1zi&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.51.56%20PM.png_4suocqh1zi&#34; class=&#34;img-center&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Ở đây mình chỉ chọn subscription field là &lt;code&gt;messages&lt;/code&gt;.&lt;/p&gt;
 
@@ -178,7 +178,7 @@ func sendTextMessage(senderID string, text string) {
 
 &lt;p&gt;Sẽ được như này:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%202.39.47%20PM.png_95j7zf1bgb&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%202.39.47%20PM.png_95j7zf1bgb&#34; class=&#34;img-center&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;localhost:8085&lt;/code&gt; đã được ngrok chuyển thành &lt;code&gt;https&lt;/code&gt; và publish ra bên ngoài.&lt;/p&gt;
 
@@ -186,7 +186,7 @@ func sendTextMessage(senderID string, text string) {
 
 &lt;p&gt;Mọi thứ gần như đã xong. Các bạn chỉ cần paste callback URL đã được forward bởi ngrok vào popup của facebook lúc nãy, điền verify token là xong rồi.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%202.43.19%20PM.png_oe8usmiac8&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%202.43.19%20PM.png_oe8usmiac8&#34; class=&#34;img-center&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Như vậy là các bạn có thể pm facebook page chat thử và chờ response.&lt;/p&gt;
 
