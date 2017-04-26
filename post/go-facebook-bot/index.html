@@ -80,7 +80,8 @@
 	<a href="http://plus.google.com/+ThibaultNormand" rel="author"><i class="fa fa-google-plus-square fa-2x"></i></a>
 	<a href="index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
-            <h6><a href="http://zenithar.org">About</a></h6>
+            <h6><a href="http://www.runikitkat.com">About</a></h6>
+
         </header>
 
 <main id="content">
@@ -99,8 +100,9 @@
 
 <p>Messenger bots của facebook ra cũng khá lâu rồi. Đã có nhiều người sử dụng cho page facebook của mình. Bài này của mình sẽ hướng dẫn các bạn viết 1 con bot tự động trả lời theo pattern có sẵn bằng Go - cho server và ngrok - để publish localhost ra ngoài.</p>
 
-<p>Kiểu này:
-<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg" alt="alt text" /></p>
+<p>Kiểu này:</p>
+
+<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg" alt="alt text" /></p>
 
 <p>Những thứ bạn cần có:</p>
 
@@ -111,8 +113,9 @@
 
 <h1 id="facebook-stuffs">Facebook stuffs</h1>
 
-<p>Đầu tiên bạn vào <a href="https://developers.facebook.com">https://developers.facebook.com</a> và chọn app của mình.
-<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e" alt="alt text" /></p>
+<p>Đầu tiên bạn vào <a href="https://developers.facebook.com">https://developers.facebook.com</a> và chọn app của mình.</p>
+
+<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e" alt="alt text" /></p>
 
 <p>Ở tab bên trái các bạn <code>Add Product</code>. Chọn <code>Webhooks</code>, và <code>New Subscription</code> và chọn <code>Page</code> ở dropdown. Sẽ hiện ra cái popup như này:</p>
 
@@ -305,7 +308,7 @@ func sendTextMessage(senderID string, text string) {
           </a>
       </li>
 			<li class="linkedin">
-          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=/post/go-facebook-bot/&amp;title=go%20facebook%20bot&amp;summary=Messenger%20bots%20c%e1%bb%a7a%20facebook%20ra%20c%c5%a9ng%20kh%c3%a1%20l%c3%a2u%20r%e1%bb%93i.%20%c4%90%c3%a3%20c%c3%b3%20nhi%e1%bb%81u%20ng%c6%b0%e1%bb%9di%20s%e1%bb%ad%20d%e1%bb%a5ng%20cho%20page%20facebook%20c%e1%bb%a7a%20m%c3%acnh.%20B%c3%a0i%20n%c3%a0y%20c%e1%bb%a7a%20m%c3%acnh%20s%e1%ba%bd%20h%c6%b0%e1%bb%9bng%20d%e1%ba%abn%20c%c3%a1c%20b%e1%ba%a1n%20vi%e1%ba%bft%201%20con%20bot%20t%e1%bb%b1%20%c4%91%e1%bb%99ng%20tr%e1%ba%a3%20l%e1%bb%9di%20theo%20pattern%20c%c3%b3%20s%e1%ba%b5n%20b%e1%ba%b1ng%20Go%20-%20cho%20server%20v%c3%a0%20ngrok%20-%20%c4%91%e1%bb%83%20publish%20localhost%20ra%20ngo%c3%a0i.%0aKi%e1%bb%83u%20n%c3%a0y%3a%20Nh%e1%bb%afng%20th%e1%bb%a9%20b%e1%ba%a1n%20c%e1%ba%a7n%20c%c3%b3%3a%0a%20M%e1%bb%99t%20page%20facebook%20Nhi%c3%aau%20%c4%91%e1%bb%a7%20r%e1%bb%93i%20%20Facebook%20stuffs%20%c4%90%e1%ba%a7u%20ti%c3%aan%20b%e1%ba%a1n%20v%c3%a0o%20https%3a%2f%2fdevelopers...." class="popup">
+          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=/post/go-facebook-bot/&amp;title=go%20facebook%20bot&amp;summary=Messenger%20bots%20c%e1%bb%a7a%20facebook%20ra%20c%c5%a9ng%20kh%c3%a1%20l%c3%a2u%20r%e1%bb%93i.%20%c4%90%c3%a3%20c%c3%b3%20nhi%e1%bb%81u%20ng%c6%b0%e1%bb%9di%20s%e1%bb%ad%20d%e1%bb%a5ng%20cho%20page%20facebook%20c%e1%bb%a7a%20m%c3%acnh.%20B%c3%a0i%20n%c3%a0y%20c%e1%bb%a7a%20m%c3%acnh%20s%e1%ba%bd%20h%c6%b0%e1%bb%9bng%20d%e1%ba%abn%20c%c3%a1c%20b%e1%ba%a1n%20vi%e1%ba%bft%201%20con%20bot%20t%e1%bb%b1%20%c4%91%e1%bb%99ng%20tr%e1%ba%a3%20l%e1%bb%9di%20theo%20pattern%20c%c3%b3%20s%e1%ba%b5n%20b%e1%ba%b1ng%20Go%20-%20cho%20server%20v%c3%a0%20ngrok%20-%20%c4%91%e1%bb%83%20publish%20localhost%20ra%20ngo%c3%a0i.%0aKi%e1%bb%83u%20n%c3%a0y%3a%0aNh%e1%bb%afng%20th%e1%bb%a9%20b%e1%ba%a1n%20c%e1%ba%a7n%20c%c3%b3%3a%0a%20M%e1%bb%99t%20page%20facebook%20Nhi%c3%aau%20%c4%91%e1%bb%a7%20r%e1%bb%93i%20%20Facebook%20stuffs%20%c4%90%e1%ba%a7u%20ti%c3%aan%20b%e1%ba%a1n%20v%c3%a0o%20https%3a%2f%2fdevelopers...." class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path d="M25.424,15.887v8.447h-4.896v-7.882c0-1.979-0.709-3.331-2.48-3.331c-1.354,0-2.158,0.911-2.514,1.803 c-0.129,0.315-0.162,0.753-0.162,1.194v8.216h-4.899c0,0,0.066-13.349,0-14.731h4.899v2.088c-0.01,0.016-0.023,0.032-0.033,0.048 h0.033V11.69c0.65-1.002,1.812-2.435,4.414-2.435C23.008,9.254,25.424,11.361,25.424,15.887z M5.348,2.501 c-1.676,0-2.772,1.092-2.772,2.539c0,1.421,1.066,2.538,2.717,2.546h0.032c1.709,0,2.771-1.132,2.771-2.546 C8.054,3.593,7.019,2.501,5.343,2.501H5.348z M2.867,24.334h4.897V9.603H2.867V24.334z"/>
@@ -385,13 +388,13 @@ func sendTextMessage(senderID string, text string) {
 </div>
 
     <div itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <h5>A propos de l'auteur</h5>
+  <h5>Runi blog</h5>
   <section>
-    <p><a href="http://profiles.google.com/thibault.normand?rel=author" itemprop="name" rel="author">Thibault Normand</a> est un dévéloppeur et un bloggeur enthousiaste, curieux de toutes nouvelles technologies liées à la sécurité, l'architecture, et le
-      web. <a href="http://zenithar.org/" rel="me">Plus d'infos...</a>
+    <p><a href="https://www.facebook.com/lnthach" itemprop="name" rel="author">Runi</a> is a gopher
     </p>
   </section>
 </div>
+
     <div id="comments">
     
     

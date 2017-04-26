@@ -19,8 +19,9 @@
 
 &lt;p&gt;Messenger bots của facebook ra cũng khá lâu rồi. Đã có nhiều người sử dụng cho page facebook của mình. Bài này của mình sẽ hướng dẫn các bạn viết 1 con bot tự động trả lời theo pattern có sẵn bằng Go - cho server và ngrok - để publish localhost ra ngoài.&lt;/p&gt;
 
-&lt;p&gt;Kiểu này:
-&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Kiểu này:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Những thứ bạn cần có:&lt;/p&gt;
 
@@ -31,8 +32,9 @@
 
 &lt;h1 id=&#34;facebook-stuffs&#34;&gt;Facebook stuffs&lt;/h1&gt;
 
-&lt;p&gt;Đầu tiên bạn vào &lt;a href=&#34;https://developers.facebook.com&#34;&gt;https://developers.facebook.com&lt;/a&gt; và chọn app của mình.
-&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Đầu tiên bạn vào &lt;a href=&#34;https://developers.facebook.com&#34;&gt;https://developers.facebook.com&lt;/a&gt; và chọn app của mình.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Ở tab bên trái các bạn &lt;code&gt;Add Product&lt;/code&gt;. Chọn &lt;code&gt;Webhooks&lt;/code&gt;, và &lt;code&gt;New Subscription&lt;/code&gt; và chọn &lt;code&gt;Page&lt;/code&gt; ở dropdown. Sẽ hiện ra cái popup như này:&lt;/p&gt;
 
