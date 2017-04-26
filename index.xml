@@ -21,7 +21,7 @@
 
 &lt;p&gt;Kiểu này:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.43.47%20PM.png_tigvw7dimg&#34; class=&#34;img-center&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Những thứ bạn cần có:&lt;/p&gt;
 
@@ -34,7 +34,7 @@
 
 &lt;p&gt;Đầu tiên bạn vào &lt;a href=&#34;https://developers.facebook.com&#34;&gt;https://developers.facebook.com&lt;/a&gt; và chọn app của mình.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-07-08%20at%201.49.49%20PM.png_bectpu8v2e&#34; class=&#34;img-center&#34; title=&#34;Steve Francia&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Ở tab bên trái các bạn &lt;code&gt;Add Product&lt;/code&gt;. Chọn &lt;code&gt;Webhooks&lt;/code&gt;, và &lt;code&gt;New Subscription&lt;/code&gt; và chọn &lt;code&gt;Page&lt;/code&gt; ở dropdown. Sẽ hiện ra cái popup như này:&lt;/p&gt;
 
