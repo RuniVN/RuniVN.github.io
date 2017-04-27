@@ -57,7 +57,7 @@
         },
         "datePublished": "2015-09-04",
         "description": "",
-        "wordCount":  1017 
+        "wordCount":  1567 
     }
     </script>
     
@@ -197,7 +197,7 @@ filetype plugin indent on    &quot; required
 
 <p>Vim là một chương trình soạn thảo được build lần đầu tiên trên UNIX, dùng để làm việc trên môi trường ko có UI. Lúc này bàn phím chưa cũng khá thô sơ, nên các bước di chuyển trên vim hơi khác với bình thường:</p>
 
-<p><img src="http://vimsheet.com/images/hjkl.png" class="img-center"></p>
+<p><img src="/post/img/hjkl.png" class="img-center"></p>
 
 <p>Các bạn có thể tự tập luyện việc sử dụng các phím này bằng <a href="http://vim-adventures.com/">vim game</a></p>
 
@@ -266,7 +266,71 @@ filetype plugin indent on    &quot; required
 
 <p>Trong số này:</p>
 
-<p>&ndash; nerdtree: Giúp bạn tổ chức folder trong vim dưới dạng cây thư mục, dễ dàng hơn trong việc mở file và folder. Sau khi cài đặt:</p>
+<p>&ndash; nerdtree: Giúp bạn tổ chức folder trong vim dưới dạng cây thư mục, dễ dàng hơn trong việc mở file và folder. Sau khi cài đặt:
+<img src="/post/img/nerdtree.png" class="img-center"></p>
+
+<p>Nhờ plugin của git, các bạn có thể biết file nào đang sửa, thêm mới và chưa được commit.</p>
+
+<p>&ndash; neocomplete: Hỗ trợ auto complete trong vim.
+<img src="/post/img/neocomplete.png" class="img-center"></p>
+
+<p>&ndash; autopair: Plugin giúp bạn gõ nhanh khi sử dụng các dấu &ldquo; ( &lsquo; [ &lt; bằng cách thêm vào thành một pair &ldquo;&rdquo; () &ldquo; [] &lt;&gt;</p>
+
+<h2 id="cơ-chế-mapping-trong-vim">Cơ chế mapping trong Vim</h2>
+
+<p>Vim có một khái niệm là mapping, cho phép người dùng mode lại các tổ hợp phím để phục vụ các mục đích cá nhân.</p>
+
+<pre><code>Khi tôi nhấn key này, tôi muốn bạn làm hành động này thay vì những gì bạn hay thường làm
+</code></pre>
+
+<p>Ví dụ:
+  Gõ vài dòng trên văn bản bằng vim, sau đó chạy command:</p>
+
+<pre><code>:map - x
+</code></pre>
+
+<p>Đặt con trỏ của bạn lên văn bản và nhấn <code>-</code>. Vim lập tức delete kí tự tại vị trí con trỏ, như là bạn đã nhấn <code>x</code></p>
+
+<p>Lúc này mapping của bạn chỉ có hiệu quả trên file text mà bạn đang edit, để mapping hoạt động trên toàn bộ các file khác, bạn cần đặt mapping vào trong file .vimrc
+Một số loại mapping thường dùng:</p>
+
+<pre><code>  nmap    : sử dụng khi ở chế độ normal
+  imap    : sử dụng trong chế độ insert
+  vmap    : sử dụng trong chế độ visual
+  noremap : không thể bị override bởi mapping khác
+</code></pre>
+
+<p>Ví dụ, khi code Go chúng ta hay dùng godef để tìm định nghĩa của hàm(biến) đó. Để sử dụng với vim-go chúng ta cần vào normal mode và gõ <code>:GoDef</code>
+Thay vì vậy, mình mapping lại như sau</p>
+
+<pre><code>nnoremap &lt;silent&gt; df :GoDef&lt;cr&gt;
+
+</code></pre>
+
+<p>Có nghĩa là, khi mình ở chế độ normal, ấn tổ hợp df sẽ thực hiện command <code>:GoDef</code>. Map này không bị override bởi bất kì normal map nào khác.
+Như vậy, khi bạn muốn tìm kiếm định nghĩa một hàm hay một biến nào đó, bạn sử dụng tổ hợp phím <code>df</code>. Việc này giảm thiểu quá trình typing đi khá nhiều.</p>
+
+<p>Một ví dụ về mapping khác, ví dụ mình hay sử dụng thư viện <a href="https://github.com/k0kubun/pp">print</a> để in ra result ở terminal đẹp hơn. Việc log để debug trong Go diễn ra khá thường xuyên, vì vậy mình đặt một map như sau:</p>
+
+<pre><code>inoremap &lt;silent&gt; pp pp.Println(&quot;&quot;)
+</code></pre>
+
+<p>Tức là khi mình gõ trong insert mode <code>pp</code> nó sẽ tự chuyển thành <code>pp.Println(&quot;&quot;)</code>, điều này giúp mình code nhanh hơn.</p>
+
+<p>Các bạn có thể đọc thêm về <a href="http://vimdoc.sourceforge.net/htmldoc/map.html">mapping in vim </a></p>
+
+<h2 id="lời-kết">Lời kết</h2>
+
+<p>Tất cả mọi thứ dường như đã sẵn sàng! Việc còn lại của bạn là tập luyện:</p>
+
+<ul>
+<li>Sử dụng nhuần nhuyễn cách di chuyển trong vim bằng các nút hjkl, cũng như các command cơ bản trong vim.</li>
+<li>Tìm thêm các plugins để hỗ trợ thêm cho vim. Một trang mình thấy khá hay và bổ ích về <a href="http://vimawesome.com">plugins cho vim</a></li>
+<li>Điểm mạnh của vim chính là customization, các bạn nên tìm cách tạo những mapping hay function giúp tăng tốc độ code.</li>
+</ul>
+
+<p>Trên đây là những gì mình tìm hiểu được về Vim và cách sử dụng Vim để code Go. Thế giới của Vim có rất nhiều điều để có thể tìm hiểu, mong nhận được sự đóng góp của mọi người.
+Nếu có điều gì muốn trao đổi, liên hệ qua mail thach@dwarvesf.com với mình nha.</p>
 
     <div id="social-bar">
 	<ul class="rrssb-buttons clearfix">
