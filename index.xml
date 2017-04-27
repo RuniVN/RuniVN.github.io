@@ -19,8 +19,9 @@
 
 &lt;p&gt;Chắc các bạn cũng không lạ lẫm gì Go nữa, Go là một ngôn ngữ backend được phát triển bởi Google.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/h46t11xlnx_blob&#34; alt=&#34;alt text&#34; /&gt;
-Một vài điểm mạnh nổi bật trong Go:
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/h46t11xlnx_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Một vài điểm mạnh nổi bật trong Go:
 - Static binaries
 - Concurrency
 - High performance&lt;/p&gt;
@@ -69,7 +70,7 @@ Cả hai đều là cách để thực hiện multi processing programming, như
 
 &lt;h1 id=&#34;goroutine&#34;&gt;Goroutine&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/fy6g2oyuqm_blob&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/fy6g2oyuqm_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Các bạn hiểu nôm na một goroutine là một function mà có thể chạy đồng thời với các function khác. Các goroutine share nhau address space.
 Không khác gì thread nhỉ?&lt;/p&gt;
@@ -98,8 +99,9 @@ Không khác gì thread nhỉ?&lt;/p&gt;
 
 &lt;h1 id=&#34;go-scheduler&#34;&gt;Go scheduler&lt;/h1&gt;
 
-&lt;p&gt;Trong Go scheduler sẽ có 3 thực thể. M P G
-&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/7tt20uu4gq_blob&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Trong Go scheduler sẽ có 3 thực thể. M P G&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/7tt20uu4gq_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;M đại diện cho OS thread.(machine)&lt;/p&gt;
 
@@ -107,7 +109,7 @@ Không khác gì thread nhỉ?&lt;/p&gt;
 
 &lt;p&gt;G là goroutine.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/ndz0upn5ir_blob&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/ndz0upn5ir_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Trên hình trên chúng ta thấy được 2 M, có giữ context P, mỗi cái sẽ chạy một goroutine G (Lưu ý là để chạy goroutine, M phải giữ context P)&lt;/p&gt;
 
@@ -116,8 +118,9 @@ Không khác gì thread nhỉ?&lt;/p&gt;
 &lt;p&gt;M và G hẳn là đã rõ rồi, cơ mà P ở đây vai trò là gì? Tại sao không gắn thẳng goroutine vào thread mà phải thông qua context?&lt;/p&gt;
 
 &lt;p&gt;Nó sẽ rơi vào trường hợp sau đây, đó là khi thread đang chạy bị block. Nguyên nhân gây ra block có thể là IO hay GC.
-Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian block, go scheduler sẽ pass context này cho thread khác để có thể tiếp tục chạy.
-&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/djsaexr43v_blob&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian block, go scheduler sẽ pass context này cho thread khác để có thể tiếp tục chạy.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/djsaexr43v_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Như hình trên, M0 đang handling một cái syscall, điều này làm những goroutine trong running queue sẽ ko được schedule, nên Go scheduler sẽ pass context P cho M1. Lưu ý là M1 có thể được tạo ra trong lúc đó, hoặc lấy ra từ thread cache.&lt;/p&gt;
 
@@ -129,8 +132,9 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 &lt;p&gt;Để khởi tạo goroutine chỉ mất tầm 4KB trong khi bạn cần 4Mb để có thể tạo ra một thread.&lt;/p&gt;
 
-&lt;p&gt;Lí do là Goroutine có thể tăng/giảm kích thước khi cần trong lúc runtime(dynamic allocation).
-&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/5nb52d9gmf_blob&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Lí do là Goroutine có thể tăng/giảm kích thước khi cần trong lúc runtime(dynamic allocation).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/5nb52d9gmf_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Go sử dụng segmented stacks. Cho các bạn chưa biết thì segmented stacks là loại stack mà cho phép tăng/giảm stack space tùy vào mục đích sử dụng, và quá trình này thực hiện ở runtime.&lt;/p&gt;
 
@@ -147,8 +151,9 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 &lt;p&gt;Khi một goroutine bị block, nó sẽ không khiến thread mà nó đang nằm trên bị ảnh hưởng theo.&lt;/p&gt;
 
-&lt;p&gt;Nếu các bạn để ý, goroutines giống như một lớp abstraction của thread. Nó giúp programmer không phải làm việc trực tiếp với threads, và OS thì hầu như không biết sự tồn tại của go routine.
-&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/mhqrpx4uab_Screen%20Shot%202017-03-28%20at%205.06.11%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nếu các bạn để ý, goroutines giống như một lớp abstraction của thread. Nó giúp programmer không phải làm việc trực tiếp với threads, và OS thì hầu như không biết sự tồn tại của go routine.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/mhqrpx4uab_Screen%20Shot%202017-03-28%20at%205.06.11%20PM.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Cái mà OS thấy chỉ đơn giản là một process ở user level xin được cấp phát và chạy multiple threads. Việc schedule goroutines trên threads tất tần tật chỉ đơn thuần là việc xây dựng một môi trường ảo ở runtime.&lt;/p&gt;
 
@@ -672,6 +677,186 @@ https://images-na.ssl-images-amazon.com/images/I/51eU5JrGAXL._AA210_.jpg&lt;/cod
 &lt;p&gt;Trên đây là những gì mình tìm hiểu được khi gặp vấn đề về crawl trong quá trình software development, ở đây là ngôn ngữ Go.
 Selenium có thể giúp chúng ta trong nhiều trường hợp khác, ví dụ những trang web cần đăng nhập, các trang web có captcha&amp;hellip;
 Nếu ai có kinh nghiệm gì khác, mong các bạn đóng góp thêm.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hướng dẫn sử dụng Vim để code Go</title>
+      <link>https://runivn.github.io/post/vim-go/</link>
+      <pubDate>Fri, 04 Sep 2015 16:45:32 +0700</pubDate>
+      
+      <guid>https://runivn.github.io/post/vim-go/</guid>
+      <description>
+
+&lt;ul&gt;
+&lt;li&gt;Vim là một text-editor khá mạnh, được sử dụng trong môi trường máy chủ không có giao diện đồ họa. Trong bài này mình sẽ giới thiệu Vim căn bản và hướng dẫn các bạn sử dụng Vim như một IDE dành cho Go&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;vim-là-gì&#34;&gt;Vim là gì?&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Vim là text editor cao cấp, phiên bản sau của Vi(Vim = Vi Improved), được viết bởi Bram Moolenaar, lần đầu tiên được đưa ra vào năm 1991.&lt;/li&gt;
+&lt;li&gt;Vim thường được gọi à &amp;ldquo;editor dành cho dân lập trình&amp;rdquo;, tuy nhiên nó có thể hầu hết các công việc liên quan tới văn bản như sửa chữa văn bản, soạn thảo email hay sửa file configs.&lt;/li&gt;
+&lt;li&gt;Vim có thể sử dụng làm IDE nhờ các plugins&lt;/li&gt;
+&lt;li&gt;Vim hỗ trợ đa nền tảng.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;cài-đặt-và-config&#34;&gt;Cài đặt và config&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Vim có thể được download tại trang &lt;a href=&#34;http://www.vim.org/download.php&#34;&gt;vim homepage&lt;/a&gt; hoặc cài đặt bằng &lt;a href=&#34;http://brew.sh/&#34;&gt;brew&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;     brew install vim
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Vì một số plugins phía sau có thể cần tới lua nên các bạn nên cài với câu lệnh:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;     brew install vim --with-lua
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Sau khi cài đặt xong, các bạn tạo một file .vimrc ở ~/ (file này không tự động tạo). File .vimrc này sẽ là nơi chứa toàn bộ config, plugins hay bundle cũng như các function liên quan tới vim.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Tiếp theo là cài vim plugins manager. Hiện tại mình đang sử dụng &lt;a href=&#34;https://github.com/VundleVim/Vundle.vim&#34;&gt;Vundle&lt;/a&gt;, các bạn có thể sử dụng &lt;a href=&#34;https://github.com/tpope/vim-pathogen&#34;&gt;panthogen&lt;/a&gt; nếu thích.
+Vundle sẽ giúp các bạn trong việc config các plugins trong .vimrc, install hay update và một số việc khác.
+Để cài đặt, các bạn clone vundle vào thư mục ~/.vim/bundle/ (thư mục .vim sẽ có sau khi cài đặt vim xong)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Copy vào .vimrc một số configs và các plugin cơ bản (chú ý dấu &amp;ldquo; trong vim là comment)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;set nocompatible              &amp;quot; be iMproved, required
+filetype off                  &amp;quot; required
+
+&amp;quot; set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+&amp;quot; alternatively, pass a path where Vundle should install plugins
+&amp;quot;call vundle#begin(&#39;~/some/path/here&#39;)
+
+&amp;quot; let Vundle manage Vundle, required
+Plugin &#39;VundleVim/Vundle.vim&#39;
+
+&amp;quot; The following are examples of different formats supported.
+&amp;quot; Keep Plugin commands between vundle#begin/end.
+&amp;quot; plugin on GitHub repo
+Plugin &#39;tpope/vim-fugitive&#39;
+&amp;quot; plugin from http://vim-scripts.org/vim/scripts.html
+Plugin &#39;L9&#39;
+&amp;quot; Git plugin not hosted on GitHub
+Plugin &#39;git://git.wincent.com/command-t.git&#39;
+&amp;quot; git repos on your local machine (i.e. when working on your own plugin)
+Plugin &#39;file:///home/gmarik/path/to/plugin&#39;
+&amp;quot; The sparkup vim script is in a subdirectory of this repo called vim.
+&amp;quot; Pass the path to set the runtimepath properly.
+Plugin &#39;rstacruz/sparkup&#39;, {&#39;rtp&#39;: &#39;vim/&#39;}
+&amp;quot; Avoid a name conflict with L9
+Plugin &#39;user/L9&#39;, {&#39;name&#39;: &#39;newL9&#39;}
+
+&amp;quot; All of your Plugins must be added before the following line
+call vundle#end()            &amp;quot; required
+filetype plugin indent on    &amp;quot; required
+&amp;quot; To ignore plugin indent changes, instead use:
+&amp;quot;filetype plugin on
+&amp;quot;
+&amp;quot; Brief help
+&amp;quot; :PluginList       - lists configured plugins
+&amp;quot; :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+&amp;quot; :PluginSearch foo - searches for foo; append `!` to refresh local cache
+&amp;quot; :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+&amp;quot;
+&amp;quot; see :h vundle for more details or wiki for FAQ
+&amp;quot; Put your non-Plugin stuff after this line
+```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Tiếp theo để install plugins, các bạn mở vim lên và chạy command sau(bằng cách nhấn Esc):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;      :PluginInstall
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Để update plugins, các bạn sử dụng&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;      :PluginUpdate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Như vậy là đủ đồ chơi để các bạn có thể sử dụng Vim rồi.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;hướng-dẫn-sử-dụng-căn-bản&#34;&gt;Hướng dẫn sử dụng căn bản.&lt;/h2&gt;
+
+&lt;p&gt;Vim là một chương trình soạn thảo được build lần đầu tiên trên UNIX, dùng để làm việc trên môi trường ko có UI. Lúc này bàn phím chưa cũng khá thô sơ, nên các bước di chuyển trên vim hơi khác với bình thường:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://vimsheet.com/images/hjkl.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Các bạn có thể tự tập luyện việc sử dụng các phím này bằng &lt;a href=&#34;http://vim-adventures.com/&#34;&gt;vim game&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Để mở một file với vim, các bạn dùng câu lệnh:
+        &lt;code&gt;vim file_name&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Trong vim có 3 mode:
+ &amp;ndash; Normal mode - xuất hiện khi bạn ấn Ecs, thường đi kèm đầu tiên bởi dấu &amp;ldquo;:&amp;ldquo;. Ở đây vim sẽ hiểu những gì bạn gõ vào là câu lệnh cho vim. Ví dụ:&lt;code&gt;:w&lt;/code&gt; là save văn bản, &lt;code&gt;:q&lt;/code&gt; là thoát một văn bản.
+       Vim có ngôn ngữ riêng dành cho mình, đó là Vim script. Vim script có thể được execute ở normal mode, ví dụ, để in ra Hello world chúng ta dùng:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;      :echo &amp;quot;Hello world&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;ndash; Insert mode - xuất hiện khi bạn nhấn một trong các nút sau :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;      a: Insert vào phía sau con trỏ hiện tại
+      A: Insert vào cuối hàng
+      i: Insert vào phía trước con trỏ hiện tại
+      I: Insert vào đầu hàng
+      o: Insert và mở một hàng trống phía dưới
+      O: Insert và mở một hàng trống phía trên
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;ndash; Visual mode &amp;ndash; xuất hiện khi bạn ấn nút v, được dùng cho việc chọn một mảng block text lớn, có thể sử dụng vào việc copy paste hoặc comment&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Các bạn có thể đọc &lt;a href=&#34;http://bullium.com/support/vim.html&#34;&gt;vim command&lt;/a&gt; để biết thêm về các command trong vim.&lt;/p&gt;
+
+&lt;h2 id=&#34;sử-dụng-vim-như-go-ide&#34;&gt;Sử dụng Vim như Go IDE&lt;/h2&gt;
+
+&lt;p&gt;Để sử dụng Vim như một IDE cho Go, chúng ta cần cài đặt một số plugins cho go.&lt;/p&gt;
+
+&lt;p&gt;Quan trọng nhất là &lt;a href=&#34;https://github.com/fatih/vim-go/&#34;&gt;vim go&lt;/a&gt;. Vim go bao gồm tập hợp các thư viện hỗ trợ Go cho vim, ví dụ &lt;code&gt;godef&lt;/code&gt;
+   &lt;code&gt;gofmt&lt;/code&gt; &lt;code&gt;go test&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Để cài đặt vim go, các bạn copy plugin vào file .vimrc&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   Plugin &#39;fatih/vim-go&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sau đó vào normal mode bằng cách nhấn &lt;code&gt;Esc&lt;/code&gt; và gõ command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   :PluginInstall
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Xong, lại tiếp tục gõ command để install Go binaries&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    :GoInstallBinaries
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Chỉ với Vim-go các bạn đã có thể code Go được rồi, nhưng để mọi thứ dễ nhìn hơn cũng như tăng độ hiệu quả, các bạn nên tìm và cài thêm các plugin sau&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    ack.vim
+    bclose.vim
+    bufexplorer
+    nerdtree
+    nerdcommenter
+    csapprox
+    vim-fugitive
+    gitv
+    vim-gitgutter
+    syntastic
+    neocomplete.vim
+    neosnippet.vim
+    auto-pairs
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Trong số này:&lt;/p&gt;
+
+&lt;p&gt;&amp;ndash; nerdtree: Giúp bạn tổ chức folder trong vim dưới dạng cây thư mục, dễ dàng hơn trong việc mở file và folder. Sau khi cài đặt:&lt;/p&gt;
 </description>
     </item>
     
