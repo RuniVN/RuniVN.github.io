@@ -111,8 +111,9 @@
 
 <h1 id="một-ít-kiến-thức-căn-bản">Một ít kiến thức căn bản</h1>
 
-<p>###Phân biệt parallelism và concurrenncy:
-Cả hai đều là cách để thực hiện multi processing programming, nhưng:</p>
+<h3 id="phân-biệt-parallelism-và-concurrenncy">Phân biệt parallelism và concurrenncy:</h3>
+
+<p>Cả hai đều là cách để thực hiện multi processing programming, nhưng:</p>
 
 <ul>
 <li>Concurrency là việc handle nhiều thứ cùng một lúc. Thử tưởng tượng bạn đang tung bóng và bắt bóng trên tay, bạn có 4 quả bóng, nhưng một lúc bạn chỉ có thể tung một quả bằng tay phải, giữ một quả bằng tay trái và hai quả còn lại ở trên bầu trời.</li>
@@ -125,7 +126,7 @@ Cả hai đều là cách để thực hiện multi processing programming, như
  - Preemptive scheduling là khi các process sẵn sàng nhường quyền điều khiển CPU.
  - Cooperative(hay còn gọi là non premptive): Khi một process được điều phối CPU, nó sẽ sử dụng CPU cho đến khi nó giải phóng(bằng cách kết thúc hoặc qua next state).</p>
 
-<p>###Phân biệt process, thread và goroutine:</p>
+<h3 id="phân-biệt-process-thread-và-goroutine">Phân biệt process, thread và goroutine:</h3>
 
 <ul>
 <li>Process hiểu nôm na là một tiến trình xử lý của máy tính. Thuở xa xưa, máy tính chỉ chạy được một process trong một thời điểm. Khi multi processing ra đời, <a href="https://en.wikipedia.org/wiki/Time-sharing">time sharing model</a> trở nên phổ biến. Mỗi process sẽ cung cấp resource riêng biệt để thực hiện chương trình.</li>
@@ -293,7 +294,7 @@ A: Pro ghê, cách mà goroutines được xử lý khi bị blocking khá giố
           </a>
       </li>
 			<li class="linkedin">
-          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/go-routine-under-the-hood/&amp;title=Goroutine%20under%20the%20hood&amp;summary=Ch%e1%ba%afc%20c%c3%a1c%20b%e1%ba%a1n%20c%c5%a9ng%20kh%c3%b4ng%20l%e1%ba%a1%20l%e1%ba%abm%20g%c3%ac%20Go%20n%e1%bb%afa%2c%20Go%20l%c3%a0%20m%e1%bb%99t%20ng%c3%b4n%20ng%e1%bb%af%20backend%20%c4%91%c6%b0%e1%bb%a3c%20ph%c3%a1t%20tri%e1%bb%83n%20b%e1%bb%9fi%20Google.%0aM%e1%bb%99t%20v%c3%a0i%20%c4%91i%e1%bb%83m%20m%e1%ba%a1nh%20n%e1%bb%95i%20b%e1%ba%adt%20trong%20Go%3a%20-%20Static%20binaries%20-%20Concurrency%20-%20High%20performance%0aTrong%20%c4%91%c3%b3%20concurrency%20%c4%91%c6%b0%e1%bb%a3c%20coi%20l%c3%a0%20first%20class%20citizen.%20Trong%20b%c3%a0i%20n%c3%a0y%20m%c3%acnh%20s%e1%ba%bd%20%c4%91i%20s%c3%a2u%20v%c3%a0o%20goroutines%20v%c3%a0%20c%c6%a1%20ch%e1%ba%bf%20ho%e1%ba%a1t%20%c4%91%e1%bb%99ng%20c%e1%bb%a7a%20n%c3%b3.%0aM%e1%bb%99t%20%c3%adt%20ki%e1%ba%bfn%20th%e1%bb%a9c%20c%c4%83n%20b%e1%ba%a3n%20%23%23%23Ph%c3%a2n%20bi%e1%bb%87t%20parallelism%20v%c3%a0%20concurrenncy%3a%20C%e1%ba%a3%20hai%20%c4%91%e1%bb%81u%20l%c3%a0%20c%c3%a1ch%20%c4%91%e1%bb%83%20th%e1%bb%b1c%20hi%e1%bb%87n%20multi%20processing%20programming%2c%20nh%c6%b0ng%3a..." class="popup">
+          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/go-routine-under-the-hood/&amp;title=Goroutine%20under%20the%20hood&amp;summary=Ch%e1%ba%afc%20c%c3%a1c%20b%e1%ba%a1n%20c%c5%a9ng%20kh%c3%b4ng%20l%e1%ba%a1%20l%e1%ba%abm%20g%c3%ac%20Go%20n%e1%bb%afa%2c%20Go%20l%c3%a0%20m%e1%bb%99t%20ng%c3%b4n%20ng%e1%bb%af%20backend%20%c4%91%c6%b0%e1%bb%a3c%20ph%c3%a1t%20tri%e1%bb%83n%20b%e1%bb%9fi%20Google.%0aM%e1%bb%99t%20v%c3%a0i%20%c4%91i%e1%bb%83m%20m%e1%ba%a1nh%20n%e1%bb%95i%20b%e1%ba%adt%20trong%20Go%3a%20-%20Static%20binaries%20-%20Concurrency%20-%20High%20performance%0aTrong%20%c4%91%c3%b3%20concurrency%20%c4%91%c6%b0%e1%bb%a3c%20coi%20l%c3%a0%20first%20class%20citizen.%20Trong%20b%c3%a0i%20n%c3%a0y%20m%c3%acnh%20s%e1%ba%bd%20%c4%91i%20s%c3%a2u%20v%c3%a0o%20goroutines%20v%c3%a0%20c%c6%a1%20ch%e1%ba%bf%20ho%e1%ba%a1t%20%c4%91%e1%bb%99ng%20c%e1%bb%a7a%20n%c3%b3.%0aM%e1%bb%99t%20%c3%adt%20ki%e1%ba%bfn%20th%e1%bb%a9c%20c%c4%83n%20b%e1%ba%a3n%20Ph%c3%a2n%20bi%e1%bb%87t%20parallelism%20v%c3%a0%20concurrenncy%3a%20C%e1%ba%a3%20hai%20%c4%91%e1%bb%81u%20l%c3%a0%20c%c3%a1ch%20%c4%91%e1%bb%83%20th%e1%bb%b1c%20hi%e1%bb%87n%20multi%20processing%20programming%2c%20nh%c6%b0ng%3a..." class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path d="M25.424,15.887v8.447h-4.896v-7.882c0-1.979-0.709-3.331-2.48-3.331c-1.354,0-2.158,0.911-2.514,1.803 c-0.129,0.315-0.162,0.753-0.162,1.194v8.216h-4.899c0,0,0.066-13.349,0-14.731h4.899v2.088c-0.01,0.016-0.023,0.032-0.033,0.048 h0.033V11.69c0.65-1.002,1.812-2.435,4.414-2.435C23.008,9.254,25.424,11.361,25.424,15.887z M5.348,2.501 c-1.676,0-2.772,1.092-2.772,2.539c0,1.421,1.066,2.538,2.717,2.546h0.032c1.709,0,2.771-1.132,2.771-2.546 C8.054,3.593,7.019,2.501,5.343,2.501H5.348z M2.867,24.334h4.897V9.603H2.867V24.334z"/>

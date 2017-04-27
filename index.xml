@@ -30,8 +30,9 @@
 
 &lt;h1 id=&#34;một-ít-kiến-thức-căn-bản&#34;&gt;Một ít kiến thức căn bản&lt;/h1&gt;
 
-&lt;p&gt;###Phân biệt parallelism và concurrenncy:
-Cả hai đều là cách để thực hiện multi processing programming, nhưng:&lt;/p&gt;
+&lt;h3 id=&#34;phân-biệt-parallelism-và-concurrenncy&#34;&gt;Phân biệt parallelism và concurrenncy:&lt;/h3&gt;
+
+&lt;p&gt;Cả hai đều là cách để thực hiện multi processing programming, nhưng:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Concurrency là việc handle nhiều thứ cùng một lúc. Thử tưởng tượng bạn đang tung bóng và bắt bóng trên tay, bạn có 4 quả bóng, nhưng một lúc bạn chỉ có thể tung một quả bằng tay phải, giữ một quả bằng tay trái và hai quả còn lại ở trên bầu trời.&lt;/li&gt;
@@ -44,7 +45,7 @@ Cả hai đều là cách để thực hiện multi processing programming, như
  - Preemptive scheduling là khi các process sẵn sàng nhường quyền điều khiển CPU.
  - Cooperative(hay còn gọi là non premptive): Khi một process được điều phối CPU, nó sẽ sử dụng CPU cho đến khi nó giải phóng(bằng cách kết thúc hoặc qua next state).&lt;/p&gt;
 
-&lt;p&gt;###Phân biệt process, thread và goroutine:&lt;/p&gt;
+&lt;h3 id=&#34;phân-biệt-process-thread-và-goroutine&#34;&gt;Phân biệt process, thread và goroutine:&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Process hiểu nôm na là một tiến trình xử lý của máy tính. Thuở xa xưa, máy tính chỉ chạy được một process trong một thời điểm. Khi multi processing ra đời, &lt;a href=&#34;https://en.wikipedia.org/wiki/Time-sharing&#34;&gt;time sharing model&lt;/a&gt; trở nên phổ biến. Mỗi process sẽ cung cấp resource riêng biệt để thực hiện chương trình.&lt;/li&gt;
