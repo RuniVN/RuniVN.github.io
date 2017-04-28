@@ -682,6 +682,215 @@ Nếu ai có kinh nghiệm gì khác, mong các bạn đóng góp thêm.&lt;/p&g
     </item>
     
     <item>
+      <title>Giới thiệu Interface trong GoLang</title>
+      <link>https://runivn.github.io/post/interface-go/</link>
+      <pubDate>Thu, 10 Sep 2015 13:09:56 +0700</pubDate>
+      
+      <guid>https://runivn.github.io/post/interface-go/</guid>
+      <description>
+
+&lt;p&gt;Trong bài này mình sẽ trình bày những gì mình tìm hiểu được về interface trong Go, khái niệm, khai báo cũng như cách sử dụng và một vài ví dụ thực tế.&lt;/p&gt;
+
+&lt;h2 id=&#34;khái-niệm&#34;&gt;Khái niệm&lt;/h2&gt;
+
+&lt;p&gt;Interface là một dạng wrapper các khai báo hàm(chỉ là tên của hàm) ở mức độ prototype. Các hàm này sẽ được định nghĩa ở các lớp dẫn xuất, mỗi lớp dẫn xuất sẽ có cách định nghĩa lại hàm khác nhau tương ứng với mục đích sử dụng&lt;/p&gt;
+
+&lt;h2 id=&#34;khai-báo&#34;&gt;Khai báo&lt;/h2&gt;
+
+&lt;p&gt;Một interface với hàm SayYourName() trả về một string được khai báo như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Hello interface{
+	SayYourName() string
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;cách-sử-dụng&#34;&gt;Cách sử dụng&lt;/h2&gt;
+
+&lt;p&gt;Interface trong Go follow concept Duck typing như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Có nghĩa là nếu một con nào có thể đi như con vịt, bơi như con vịt và quạc quạc như con vịt thì tôi gọi đó là con vịt.&lt;/p&gt;
+
+&lt;p&gt;Mình sẽ đưa một ví dụ cụ thể. Mình có struct User, struct này có một hàm SayYourName()&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+type User struct {
+	FirstName, LastName string
+}
+
+func (u *User) SayYourName() string {
+	return fmt.Sprintf(&amp;quot;%s %s&amp;quot;, u.FirstName, u.LastName)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Một hàm có param là interface Hello và trả về một string&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Greet(n Hello) string {
+	return fmt.Sprintf(&amp;quot;Dear %s&amp;quot;, n.SayYourName())
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ở đây, hàm Greet nhận vào một param là interface Hello, và nó cũng chấp nhận &lt;b&gt;bất cứ param nào nếu nó có hàm SayYourName&lt;/b&gt;.
+Thử chạy chương trình:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func main() {
+	u := &amp;amp;User{&amp;quot;Runi&amp;quot;, &amp;quot;Lazy&amp;quot;}
+	fmt.Println(Greet(u))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Thật vậy ta có, kết quả &amp;ldquo;Dear Runi Lazy&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Chú ý là param truyền vào hàm Greet phải là những đối tượng có thể có chứa các hàm của riêng đối tượng đó, nhưng bắt buộc phải có  &lt;b&gt;tất cả&lt;/b&gt; những hàm của interface Hello. Giả sử thêm vào interface này một hàm Goodbye():&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Hello interface{
+	SayYourName() string
+	Goodbye() string
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Kết quả ta bị báo lỗi như sau:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://runivn.github.io/post/img/interface-wrong.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;sử-dụng-interface-trong-go&#34;&gt;Sử dụng Interface trong Go&lt;/h2&gt;
+
+&lt;p&gt;Ngoài interface có chứa khai báo hàm, interface còn một khái niệm là empty interface, hay interface{}.
+Interface này không có hàm, cũng có nghĩa là tất cả các loại variables hay struct&amp;hellip; đều có thể thoả mãn làm param cho hàm nhận vào empty interface.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func DoSomething(v interface{}) {
+   // ...
+}
+//Hàm này nhận vào bất cứ loại param nào.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Như vậy ta có thể sử dụng empty interface cho các hàm nào mà param truyền vào vẫn chưa xác định cụ thể. Khi vào trong hàm thì tuỳ trường hợp sẽ có các cách tuỳ biến để convert về giá trị chúng ta cần.&lt;/p&gt;
+
+&lt;p&gt;Ví dụ, ta có hàm PrintAll nhận vào một mảng giá trị empty interface.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func PrintAll(vals []interface{}) {
+    for _, val := range vals {
+        fmt.Println(val)
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Trong hàm main ta tiến hành convert:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+func main() {
+    names := []string{&amp;quot;stanley&amp;quot;, &amp;quot;david&amp;quot;, &amp;quot;oscar&amp;quot;}
+    vals := make([]interface{}, len(names))
+    for i, v := range names {
+        vals[i] = v
+    }
+    PrintAll(vals)
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Một ví dụ khác, mình sưu tầm từ blog &lt;a href=&#34;http://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go&#34;&gt;how to use interface in Go&lt;/a&gt;:
+Khi nhận response từ Twitter API thì date time có dạng timestamp như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Thu May 31 00:00:01 +0000 2012&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Dưới dây là một hàm dùng để in ra kiểu của timeStamp khi nhận từ response:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var input = `
+{
+    &amp;quot;created_at&amp;quot;: &amp;quot;Thu May 31 00:00:01 +0000 2012&amp;quot;
+}
+`
+
+func main() {
+    var val map[string]interface{}
+
+    if err := json.Unmarshal([]byte(input), &amp;amp;val); err != nil {
+        panic(err)
+    }
+
+    fmt.Println(val)
+    for k, v := range val {
+        fmt.Println(k, reflect.TypeOf(v))
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Chạy hàm trên ta được :&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://runivn.github.io/post/img/return-twitter.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Hum.. timeStamp mà lại kiểu string thì chưa hợp lý lắm, thử parse lại về trực tiếp kiểu time.Time&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    var val map[string]time.Time
+    if err := json.Unmarshal([]byte(input), &amp;amp;val); err != nil {
+        panic(err)
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Thử chạy lại:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://runivn.github.io/post/img/panic-interface.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Lỗi này xảy ra vì không thể parse chuỗi kia về time.Time được (Twitter API được viết bằng Ruby, cách parse sẽ khác với Go).
+Vậy chúng ta thử viết lại hàm parse chuỗi. Ta có interface Unmarshal, được lấy từ &lt;a href=&#34;http://golang.org/pkg/encoding/json/#Unmarshaler&#34;&gt;Encode Json Package&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Unmarshaler interface {
+    UnmarshalJSON([]byte) error
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ta cần viết lại hàm UnmarshalJSON để có thể parse về timeStamp(sử dụng RubyDate)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Timestamp time.Time
+
+func (t *Timestamp) UnmarshalJSON(b []byte) error {
+     v, err := time.Parse(time.RubyDate, string(b[1:len(b)-1]))
+    if err != nil {
+        return err
+    }
+    *t = Timestamp(v)
+    return nil
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Khi đó, hàm main sẽ được viết lại như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func main() {
+	var val map[string]Timestamp
+
+	if err := json.Unmarshal([]byte(input), &amp;amp;val); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(val)
+	for k, v := range val {
+		fmt.Println(k, reflect.TypeOf(v))
+	}
+
+    fmt.Println(time.Time(val[&amp;quot;created_at&amp;quot;]))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Chạy chương trình ta được kết quả:
+&lt;img src=&#34;https://runivn.github.io/post/img/interface-timestamp.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Như vậy chúng ta đã vừa tạo một đối tượng có hàm UnmarshalJSON để có thể truyền vào hàm json.Unmarshal trong package encoding/json nhờ đó có được kết quả mong muốn.&lt;/p&gt;
+
+&lt;h2 id=&#34;lời-kết&#34;&gt;Lời kết&lt;/h2&gt;
+
+&lt;p&gt;Trên đây là những gì mình tìm hiểu được trong quá trình sử dụng interface trong Go. Interface là một trong những kĩ thuật đặc trưng của Go, mong nhận được ý kiến đóng góp từ các bạn.
+Nếu có điều gì muốn trao đổi, liên hệ qua mail thach@dwarvesf.com với mình nha.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Hướng dẫn sử dụng Vim để code Go</title>
       <link>https://runivn.github.io/post/vim-go/</link>
       <pubDate>Fri, 04 Sep 2015 16:45:32 +0700</pubDate>
