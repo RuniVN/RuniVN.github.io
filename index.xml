@@ -358,8 +358,9 @@ Ngoài ra GraphQL cũng giúp drops TCP requests + network round trip với sing
 
 &lt;p&gt;Với GraphQL cách approach của bạn sẽ natural hơn, tức là suy nghĩ cái mình cần trả về, thay vì suy nghĩ cách lấy đầu tiên. Điều này có thể speed up development.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/6hcpcxbkdv_image.png&#34; alt=&#34;alt text&#34; /&gt;
-Q: GraphQL có drawbacks không?
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/6hcpcxbkdv_image.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Q: GraphQL có drawbacks không?
 A: Có chứ, khá nhiều đấy. Một số ví dụ như: không thể versioned, painful khi xử lý upload hay validation, cache các kiểu không safe (DataLoader)
 Q: Vậy xài chung REST và GraphQL được không?
 A: Hoàn toàn CÓ. Hai thằng này có thể bổ sung cho những khuyết điểm của nhau. Đôi bạn cùng tiến.&lt;/p&gt;
