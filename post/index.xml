@@ -6,8 +6,367 @@
     <description>Recent content in Posts on Runi blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Mar 2017 16:45:32 +0700</lastBuildDate>
+    <lastBuildDate>Sat, 22 Jul 2017 16:45:32 +0700</lastBuildDate>
     <atom:link href="https://runivn.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Single endpoint với GraphQL (backend Go)</title>
+      <link>https://runivn.github.io/post/graphql/</link>
+      <pubDate>Sat, 22 Jul 2017 16:45:32 +0700</pubDate>
+      
+      <guid>https://runivn.github.io/post/graphql/</guid>
+      <description>
+
+&lt;p&gt;GraphQL được tạo ra bởi Facebook vào năm 2012, production ready năm 2016 nhưng hiện tại vẫn khá ít công ty và developers Việt Nam sử dụng. Nhân tiện có một khách hàng muốn xài GraphQL nên team mình đã apply vào luôn. Sau khi xài xong thì thấy khá kute phô mai que nên muốn share ít kiến thức tìm hiểu được.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/lq5y5mw0h0_image.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;problem&#34;&gt;Problem&lt;/h1&gt;
+
+&lt;p&gt;Để hiểu được concreate problem của GraphQL thì phải nói tới REST.&lt;/p&gt;
+
+&lt;h2 id=&#34;rest&#34;&gt;REST&lt;/h2&gt;
+
+&lt;p&gt;Chắc hẳn mọi người đều đã làm việc với REST rồi.
+Có rất nhiều thứ để nói về REST, mình sẽ tóm gọn lại một cách dễ hiểu.
+REST hay Representational state transfer là tập hợp những architecture principles, qui định cách thức clients interact với server, giúp application có thể manage tài nguyên.&lt;/p&gt;
+
+&lt;p&gt;Citizen của REST là &amp;ldquo;resource&amp;rdquo;. Khi bạn muốn retreive dữ liệu resource thì bạn dùng GET, khi muốn insert thì dùng POST&amp;hellip; kiểu vậy.&lt;/p&gt;
+
+&lt;p&gt;Một điểm quan trọng đó là REST stateless và cacheable.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/gggntnv456_image.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;rest-drawbacks&#34;&gt;REST drawbacks&lt;/h2&gt;
+
+&lt;p&gt;Ứng dụng mình chia làm 2 phần, backend là Go và frontend là React. Mình bắt đầu gặp những vấn đề khi ứng dụng grows:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Số lượng API endpoint quá nhiều, đôi lúc sẽ phải cầm cái id này chạy tới endpoint này kết quả, sau đó cầm tập id được response chạy tới endpoint khác để lấy cái thật sự cần.&lt;/li&gt;
+&lt;li&gt;Rất khó để define ra được một chuẩn chung của dữ liệu trả về, vì đôi lúc với một model, client có thể lúc thì cần fields này, lúc thì cần những fields khác.&lt;/li&gt;
+&lt;li&gt;Khi mà đổi một cái gì đó, ví dụ schema, thì không biết những chỗ nào bị impact.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;graphql-for-the-sake&#34;&gt;GraphQL for the sake&lt;/h1&gt;
+
+&lt;p&gt;GraphQL là một internal project của Facebook, sau đó được opensourced. Nó là một query language cho phép clients construct resource mà bạn muốn server trả về.&lt;/p&gt;
+
+&lt;p&gt;Ví dụ:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  me {
+    name
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Đoạn query trên muốn khi gọi API thì lấy tên của chính mình. Kết quả trả về:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;me&amp;quot;: {
+    &amp;quot;name&amp;quot;: &amp;quot;Runi&amp;quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bạn có thể nhận ra query của nó gần như là một JSON mà bị missing value, và kết quả trả về là JSON với format đúng như client requests.&lt;/p&gt;
+
+&lt;h1 id=&#34;rest-vs-graphql&#34;&gt;REST vs GraphQL&lt;/h1&gt;
+
+&lt;p&gt;Thật ra so sánh 2 thằng này thì không hợp lý lắm, point ở đây là so sánh 2 thằng này &amp;ldquo;in practice&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Giống:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Đều là send data over HTTP request.&lt;/li&gt;
+&lt;li&gt;Core idea đều là resource.&lt;/li&gt;
+&lt;li&gt;Output cuối cùng là JSON là như nhau.&lt;/li&gt;
+&lt;li&gt;Đều có cách phân biệt giữa write/read data.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Khác:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;REST coupled giữa cách bạn define data và cách bạn retrieve nó. Ví dụ &lt;code&gt;/songs/1&lt;/code&gt;.  GraphQL separates endpoint và cách bạn lấy data.&lt;/li&gt;
+&lt;li&gt;REST định nghĩa những thông tin resource ở server, clients chỉ make a call. GraphQL cho phép client đưa lên một datashape, nhiệm vụ server phải trả về đúng thông tin như vậy.&lt;/li&gt;
+&lt;li&gt;Khi bạn muốn fetch nhiều related data bạn phải gọi multiple request ở REST. GraphQL cho phép bạn traverse entry point để lấy data bằng single request. (hacky way ở REST là tạo 1 endpoint mới gom response lại, too painful).&lt;/li&gt;
+&lt;li&gt;Thay đổi read/write ở REST bằng http method, GraphQL bằng query.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Well, tới đây chắc các bạn cũng có một quick overview về GraphQL rồi. Mình sẽ apply vào Go backend xem thế nào.&lt;/p&gt;
+
+&lt;h1 id=&#34;integrate-backend-go&#34;&gt;Integrate backend Go&lt;/h1&gt;
+
+&lt;p&gt;Mình đã thử dùng GraphQL trên elixir và Ruby. Phải thừa nhận là vì dynamic language nên code &amp;hellip; rất sướng tay.
+Trên Go thì hơi trâu bò một chút.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Bài toán&lt;/strong&gt;: Mình sẽ tạo một endpoint GraphQL, dùng nó lấy random một bài hát trong database, và tạo một song mới.&lt;/p&gt;
+
+&lt;p&gt;Mình sử dụng &lt;code&gt;github.com/graphql-go/graphql&lt;/code&gt; làm GraphQL implementation.&lt;/p&gt;
+
+&lt;p&gt;Vì GraphQL idiomatic là chỉ dùng single endpoint, nên mình chỉ serve:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http.Handle(&amp;quot;/graphql&amp;quot;, graphHandler)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Trong đó&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func  graphHandler(w http.ResponseWriter, r *http.Request) {
+    var schema, _ = graphql.NewSchema(graphql.SchemaConfig{
+    Query:    query,
+    Mutation: mutation,
+    })
+
+	result := graphql.Do(graphql.Params{
+		Schema:        schema,
+		RequestString: r.URL.Query().Get(&amp;quot;query&amp;quot;),
+	})
+
+	json.NewEncoder(w).Encode(result)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Trong GraphQL, &lt;strong&gt;query = read và  mutation = write.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Hàm trên có thể hiểu, graphql handler sẽ đọc vào một cái schema, parse query string từ client gửi lên để lấy datashape, sau đó query data từ nơi nào đó trả về.&lt;/p&gt;
+
+&lt;h2 id=&#34;query&#34;&gt;Query&lt;/h2&gt;
+
+&lt;p&gt;Giờ mình sẽ construct query object để lấy bài hát.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var query = graphql.NewObject(graphql.ObjectConfig{
+		Name: &amp;quot;Query&amp;quot;,
+		Fields: graphql.Fields{
+			&amp;quot;song&amp;quot;: &amp;amp;graphql.Field{
+				Type: songType,
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					song, err := getRandomSong()
+					if err != nil {
+						logrus.Errorf(&amp;quot;failed to random song, err = %v&amp;quot;, err)
+						return nil, err
+					}
+
+					return song, nil
+				},
+			},
+		},
+	})
+
+
+
+var songType = graphql.NewObject(graphql.ObjectConfig{
+	Name:        &amp;quot;Song&amp;quot;,
+	Description: &amp;quot;Song contains some information&amp;quot;,
+	Fields: graphql.Fields{
+		&amp;quot;id&amp;quot;: &amp;amp;graphql.Field{
+			Type:        graphql.ID,
+			Description: &amp;quot;Song&#39;s id&amp;quot;,
+		},
+		&amp;quot;title&amp;quot;: &amp;amp;graphql.Field{
+			Type:        graphql.String,
+			Description: &amp;quot;The title of the song.&amp;quot;,
+		},
+		&amp;quot;artist&amp;quot;: &amp;amp;graphql.Field{
+			Type:        graphql.String,
+			Description: &amp;quot;The artist of the song.&amp;quot;,
+		},
+	},
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Có 2 thứ ở đây cần chú ý:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Type của object bạn muốn trả về, đoạn code trên là &lt;code&gt;songType&lt;/code&gt; qui định datashape mà client có thể query để lấy được.&lt;/li&gt;
+&lt;li&gt;Resolve function:  Khi bạn viết một schema cho GraphQL, bạn phải viết resolve function cho nó. GraphQL execution engine sẽ invoke function này khi data thật sự được queried.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Như vậy với đoạn code trên, nếu không có gì xảy ra thì khi make request với query như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;query {
+	song {
+    	id
+  		title
+		artist
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;sẽ được kết quả&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;song&amp;quot;: {
+        &amp;quot;id&amp;quot;: 1,
+        &amp;quot;title&amp;quot;: &amp;quot;Chieu Hom Ay&amp;quot;,
+        &amp;quot;artist&amp;quot;: &amp;quot;Jaykii&amp;quot;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Match exactly với schema chúng ta vừa định nghĩa.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Vậy còn nếu muốn random một bài hát, mà có theo &lt;code&gt;tag&lt;/code&gt; do client gửi lên thì sao?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;GraphQL hỗ trợ arguments, ta sẽ sửa lại code schema:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var query = graphql.NewObject(graphql.ObjectConfig{
+		Name: &amp;quot;Query&amp;quot;,
+		Fields: graphql.Fields{
+			&amp;quot;song&amp;quot;: &amp;amp;graphql.Field{
+				Type: songType,
+                Args: graphql.FieldConfigArgument{
+					&amp;quot;tag&amp;quot;: &amp;amp;graphql.ArgumentConfig{
+						Type: graphql.String,
+					},
+				},
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+                	tag := p.Args[&amp;quot;tag&amp;quot;].(string)
+					song, err := getRandomSongByTag(tag)
+					if err != nil {
+						logrus.Errorf(&amp;quot;failed to random song by tag, err = %v&amp;quot;, err)
+						return nil, err
+					}
+
+					return song, nil
+				},
+			},
+		},
+	})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Vậy query string của chúng ta sẽ thay đổi một chút thành:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;query {
+	song(tag: &amp;quot;us&amp;quot;) {
+    	id
+  		title
+		artist
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Kết quả sẽ random ra 1 bài hát có tag là &amp;ldquo;us&amp;rdquo;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;song&amp;quot;: {
+        &amp;quot;id&amp;quot;: 12,
+        &amp;quot;title&amp;quot;: &amp;quot;Leave out all the reset&amp;quot;,
+        &amp;quot;artist&amp;quot;: &amp;quot;Linkin Park&amp;quot;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;mutation&#34;&gt;Mutation&lt;/h2&gt;
+
+&lt;p&gt;GraphQL tư tưởng là dùng để ease for querying data là chính, nhưng với một data platform hoàn chỉnh thì phải phải hỗ trợ cả việc modify data trên server.&lt;/p&gt;
+
+&lt;p&gt;Bên REST không khuyến khích bạn modify data bằng &lt;code&gt;GET&lt;/code&gt; request. Nhưng thật ra bạn vẫn làm được (nhét hết lên url params chẳng hạn, có điều url thì có limit length).  Bên GraphQL cũng vậy, bạn thậm chí có thể write data bằng query, nhưng nó ko đúng convention. GraphQL cung cấp &lt;code&gt;mutation&lt;/code&gt; để làm chuyện này.&lt;/p&gt;
+
+&lt;p&gt;Ví dụ bạn muốn tạo một bài hát mới, chúng ta sẽ viết một song mutation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var mutation = graphql.NewObject(graphql.ObjectConfig{
+	Name: &amp;quot;Mutation&amp;quot;,
+	Fields: graphql.Fields{
+		&amp;quot;createSong&amp;quot;: &amp;amp;graphql.Field{
+			Type:        songInputType,
+			Description: &amp;quot;Create new song&amp;quot;,
+			Args: graphql.FieldConfigArgument{
+				&amp;quot;title&amp;quot;: &amp;amp;graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+				&amp;quot;artist&amp;quot;: &amp;amp;graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				title, _ := params.Args[&amp;quot;title&amp;quot;].(string)
+				artist, _ := params.Args[&amp;quot;artist&amp;quot;].(string)
+
+				song := &amp;amp;domain.Song{
+                   		Title: title,
+                   		Artist: artist,
+                   }
+
+				err := saveSong(song)
+				if err != nil {
+                	logrus.Errorf(&amp;quot;failed to save song, err = %v&amp;quot;, err)
+					return nil, err
+				}
+
+				return song, nil
+			},
+		},
+	},
+})
+
+var songInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+	Name:        &amp;quot;Song&amp;quot;,
+	Description: &amp;quot;Song inputs&amp;quot;,
+	Fields: graphql.InputObjectConfigFieldMap{
+		&amp;quot;title&amp;quot;: &amp;amp;graphql.InputObjectFieldConfig{
+			Type:        graphql.String,
+			Description: &amp;quot;The title of the song.&amp;quot;,
+		},
+		&amp;quot;artist&amp;quot;: &amp;amp;graphql.InputObjectFieldConfig{
+			Type:        graphql.String,
+			Description: &amp;quot;The artist of the song.&amp;quot;,
+		},
+	},
+})
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;GraphQL phân biệt kiểu Input và Output. Các bạn có thể hiểu đơn giản là Output =&amp;gt; cho những thứ để export ra và Input là các giá trị được truyền vào. Output và Input cùng một model nhưng có thể có schema khác nhau, Output có thể chứa nhiều complex data type hơn.&lt;/p&gt;
+
+&lt;p&gt;Trong ví dụ trên là songInputType sẽ là datashape của các parameters mà clients sẽ gửi lên. Khi đó mutation của chúng ta sẽ là:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mutation {
+	createSong(title: &amp;quot;Co em cho&amp;quot;, artist: &amp;quot;Min&amp;quot;) {
+    	id
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Tức là chúng ta đang muốn tạo một bài hát mới với given title + artist, sau khi tạo xong thì trả về id.
+Kết quả mong đợi sẽ là&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+	&amp;quot;createSong&amp;quot;: {
+    	&amp;quot;id: 16
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Như vậy là chúng ta đã biết cách để read/write data với GraphQL.&lt;/p&gt;
+
+&lt;h1 id=&#34;combo-với-frontend&#34;&gt;Combo với frontend&lt;/h1&gt;
+
+&lt;p&gt;Đây là backend, vậy frontend thì chúng ta có gì?
+- Với Vue thì bọn mình sử dụng &lt;a href=&#34;https://github.com/Akryum/vue-apollo&#34;&gt;Vue-apolo&lt;/a&gt;
+- React thì dùng &lt;a href=&#34;https://github.com/facebook/relay&#34;&gt;Relay&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Ngoài ra các bạn nào chưa muốn chuyển giao công nghệ kịp cả hai platform, thì có thể chơi thằng này &lt;a href=&#34;http://join-monster.readthedocs.io/en/latest/&#34;&gt;join monster&lt;/a&gt;. Đại loại là một query planner, sinh ra optimal sql query. Bạn có interface cho GraphQL (viết frontend sướng quá chừng), backend thì đỡ phải cài lại query. :3.&lt;/p&gt;
+
+&lt;p&gt;Vã quá thì bạn nào xài posgres có thể chơi &lt;a href=&#34;https://github.com/postgraphql/postgraphql&#34;&gt;postgraphql&lt;/a&gt; bụp 1 cái tự instropect schema, tự gen API GraphQL luôn.&lt;/p&gt;
+
+&lt;h1 id=&#34;tổng-kết&#34;&gt;Tổng kết&lt;/h1&gt;
+
+&lt;p&gt;GraphQL rất thích hợp khi mà product của bạn có các clients cần flexible response format, lúc thì cần như thế này, lúc cần như thế kia mà không cần backend phải thay đổi.
+Ngoài ra GraphQL cũng giúp drops TCP requests + network round trip với single endpoint.&lt;/p&gt;
+
+&lt;p&gt;Với GraphQL cách approach của bạn sẽ natural hơn, tức là suy nghĩ cái mình cần trả về, thay vì suy nghĩ cách lấy đầu tiên. Điều này có thể speed up development.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/6hcpcxbkdv_image.png&#34; alt=&#34;alt text&#34; /&gt;
+Q: GraphQL có drawbacks không?
+A: Có chứ, khá nhiều đấy. Một số ví dụ như: không thể versioned, painful khi xử lý upload hay validation, cache các kiểu không safe (DataLoader)
+Q: Vậy xài chung REST và GraphQL được không?
+A: Hoàn toàn CÓ. Hai thằng này có thể bổ sung cho những khuyết điểm của nhau. Đôi bạn cùng tiến.&lt;/p&gt;
+
+&lt;p&gt;Bài viết được dẫn từ &lt;a href=&#34;www.runikitkat.com&#34;&gt;Runiblog&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Goroutine under the hood</title>
