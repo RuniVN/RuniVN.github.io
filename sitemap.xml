@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://runivn.github.io/post/biet-dau-la-dinh-menh/</loc>
+    <lastmod>2017-07-27T16:45:32+07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://runivn.github.io/post/graphql/</loc>
     <lastmod>2017-07-22T16:45:32+07:00</lastmod>
   </url>
@@ -43,13 +48,13 @@
   
   <url>
     <loc>https://runivn.github.io/post/</loc>
-    <lastmod>2017-07-22T16:45:32+07:00</lastmod>
+    <lastmod>2017-07-27T16:45:32+07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://runivn.github.io/</loc>
-    <lastmod>2017-07-22T16:45:32+07:00</lastmod>
+    <lastmod>2017-07-27T16:45:32+07:00</lastmod>
     <priority>0</priority>
   </url>
   
