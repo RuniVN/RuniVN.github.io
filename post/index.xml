@@ -152,7 +152,7 @@ Bên kia tiếp:&lt;/p&gt;
 
 &lt;p&gt;GraphQL được tạo ra bởi Facebook vào năm 2012, production ready năm 2016 nhưng hiện tại vẫn khá ít công ty và developers Việt Nam sử dụng. Nhân tiện có một khách hàng muốn xài GraphQL nên team mình đã apply vào luôn. Sau khi xài xong thì thấy khá kute phô mai que nên muốn share ít kiến thức tìm hiểu được.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/lq5y5mw0h0_image.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/lq5y5mw0h0_image.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;problem&#34;&gt;Problem&lt;/h1&gt;
 
@@ -168,7 +168,7 @@ REST hay Representational state transfer là tập hợp những architecture pr
 
 &lt;p&gt;Một điểm quan trọng đó là REST stateless và cacheable.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/gggntnv456_image.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/gggntnv456_image.png&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;rest-drawbacks&#34;&gt;REST drawbacks&lt;/h2&gt;
 
