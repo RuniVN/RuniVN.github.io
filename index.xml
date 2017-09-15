@@ -628,9 +628,12 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 &lt;p&gt;Như hình trên, M0 đang handling một cái syscall, điều này làm những goroutine trong running queue sẽ ko được schedule, nên Go scheduler sẽ pass context P cho M1. Lưu ý là M1 có thể được tạo ra trong lúc đó, hoặc lấy ra từ thread cache.&lt;/p&gt;
 
-&lt;p&gt;Khi M0 làm xong syscall, thì nó sẽ:
-- Tìm kiếm xung quanh, bằng cách chôm &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; goroutine run queue của thread khác
-- Nếu không tìm thấy gì, nó sẽ đặt mình vào thread cache và ngủ.&lt;/p&gt;
+&lt;p&gt;Khi M0 làm xong syscall, thì nó sẽ:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Tìm kiếm xung quanh, bằng cách chôm &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; goroutine run queue của thread khác&lt;/li&gt;
+&lt;li&gt;Nếu không tìm thấy gì, nó sẽ đặt mình vào thread cache và ngủ.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h1 id=&#34;tại-sao-goroutine-lại-nhẹ-như-vậy&#34;&gt;Tại sao Goroutine lại nhẹ như vậy?&lt;/h1&gt;
 
@@ -642,16 +645,22 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 &lt;p&gt;Go sử dụng segmented stacks. Cho các bạn chưa biết thì segmented stacks là loại stack mà cho phép tăng/giảm stack space tùy vào mục đích sử dụng, và quá trình này thực hiện ở runtime.&lt;/p&gt;
 
-&lt;p&gt;Quá trình tăng stack khi cần thiết của một go routine sẽ thực hiện như sau:
-- Một go routine khi init sẽ có 4KB space
-- Nếu quá tải, Go runtime sẽ allocate thêm stack. Việc quản lý một function có run out of memory hay không được thực hiện bởi &lt;code&gt;prologue&lt;/code&gt;. Mỗi function đều có một prologue để quản lý bộ nhớ.&lt;/p&gt;
+&lt;p&gt;Quá trình tăng stack khi cần thiết của một go routine sẽ thực hiện như sau:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Một go routine khi init sẽ có 4KB space&lt;/li&gt;
+&lt;li&gt;Nếu quá tải, Go runtime sẽ allocate thêm stack. Việc quản lý một function có run out of memory hay không được thực hiện bởi &lt;code&gt;prologue&lt;/code&gt;. Mỗi function đều có một prologue để quản lý bộ nhớ.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h1 id=&#34;goroutine-blocking&#34;&gt;Goroutine blocking&lt;/h1&gt;
 
-&lt;p&gt;Goroutine sẽ bị block trong các trường hợp sau:
-- Network
-- Sleep
-- Channel operations&lt;/p&gt;
+&lt;p&gt;Goroutine sẽ bị block trong các trường hợp sau:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Network&lt;/li&gt;
+&lt;li&gt;Sleep&lt;/li&gt;
+&lt;li&gt;Channel operations&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Khi một goroutine bị block, nó sẽ không khiến thread mà nó đang nằm trên bị ảnh hưởng theo.&lt;/p&gt;
 

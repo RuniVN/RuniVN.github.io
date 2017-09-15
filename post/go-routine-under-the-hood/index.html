@@ -57,7 +57,7 @@
         },
         "datePublished": "2017-03-28",
         "description": "",
-        "wordCount":  1736 
+        "wordCount":  1729 
     }
     </script>
     
@@ -217,9 +217,12 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 <p>Như hình trên, M0 đang handling một cái syscall, điều này làm những goroutine trong running queue sẽ ko được schedule, nên Go scheduler sẽ pass context P cho M1. Lưu ý là M1 có thể được tạo ra trong lúc đó, hoặc lấy ra từ thread cache.</p>
 
-<p>Khi M0 làm xong syscall, thì nó sẽ:
-- Tìm kiếm xung quanh, bằng cách chôm <sup>1</sup>&frasl;<sub>2</sub> goroutine run queue của thread khác
-- Nếu không tìm thấy gì, nó sẽ đặt mình vào thread cache và ngủ.</p>
+<p>Khi M0 làm xong syscall, thì nó sẽ:</p>
+
+<ul>
+<li>Tìm kiếm xung quanh, bằng cách chôm <sup>1</sup>&frasl;<sub>2</sub> goroutine run queue của thread khác</li>
+<li>Nếu không tìm thấy gì, nó sẽ đặt mình vào thread cache và ngủ.</li>
+</ul>
 
 <h1 id="tại-sao-goroutine-lại-nhẹ-như-vậy">Tại sao Goroutine lại nhẹ như vậy?</h1>
 
@@ -231,16 +234,22 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 <p>Go sử dụng segmented stacks. Cho các bạn chưa biết thì segmented stacks là loại stack mà cho phép tăng/giảm stack space tùy vào mục đích sử dụng, và quá trình này thực hiện ở runtime.</p>
 
-<p>Quá trình tăng stack khi cần thiết của một go routine sẽ thực hiện như sau:
-- Một go routine khi init sẽ có 4KB space
-- Nếu quá tải, Go runtime sẽ allocate thêm stack. Việc quản lý một function có run out of memory hay không được thực hiện bởi <code>prologue</code>. Mỗi function đều có một prologue để quản lý bộ nhớ.</p>
+<p>Quá trình tăng stack khi cần thiết của một go routine sẽ thực hiện như sau:</p>
+
+<ul>
+<li>Một go routine khi init sẽ có 4KB space</li>
+<li>Nếu quá tải, Go runtime sẽ allocate thêm stack. Việc quản lý một function có run out of memory hay không được thực hiện bởi <code>prologue</code>. Mỗi function đều có một prologue để quản lý bộ nhớ.</li>
+</ul>
 
 <h1 id="goroutine-blocking">Goroutine blocking</h1>
 
-<p>Goroutine sẽ bị block trong các trường hợp sau:
-- Network
-- Sleep
-- Channel operations</p>
+<p>Goroutine sẽ bị block trong các trường hợp sau:</p>
+
+<ul>
+<li>Network</li>
+<li>Sleep</li>
+<li>Channel operations</li>
+</ul>
 
 <p>Khi một goroutine bị block, nó sẽ không khiến thread mà nó đang nằm trên bị ảnh hưởng theo.</p>
 
