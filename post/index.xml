@@ -573,10 +573,13 @@ Ngoài ra GraphQL cũng giúp drops TCP requests + network round trip với sing
 &lt;p&gt;Các bạn hiểu nôm na một goroutine là một function mà có thể chạy đồng thời với các function khác. Các goroutine share nhau address space.
 Không khác gì thread nhỉ?&lt;/p&gt;
 
-&lt;p&gt;Một số đặc điểm goroutine:
-- Goroutine là cooperative.
-- Compiler sẽ biết register nào được sử dụng vào tự động lưu nó
-- Context switch của Goroutine xảy ra ở 2 thời điểm: khi một go routine đang chờ data để xử lý (channel operation) hoặc cần thêm space để nhét data (IO, GC).&lt;/p&gt;
+&lt;p&gt;Một số đặc điểm goroutine:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Goroutine là cooperative.&lt;/li&gt;
+&lt;li&gt;Compiler sẽ biết register nào được sử dụng vào tự động lưu nó&lt;/li&gt;
+&lt;li&gt;Context switch của Goroutine xảy ra ở 2 thời điểm: khi một go routine đang chờ data để xử lý (channel operation) hoặc cần thêm space để nhét data (IO, GC).&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h1 id=&#34;so-sánh-goroutine-và-thread&#34;&gt;So sánh goroutine và thread&lt;/h1&gt;
 
@@ -590,10 +593,13 @@ Không khác gì thread nhỉ?&lt;/p&gt;
 
 &lt;p&gt;Bởi vì Goroutine là cooperative, nên OS gần như không còn dính dáng tới việc đưa ra quyết định schedule. Đảm nhận việc này là Go scheduler.&lt;/p&gt;
 
-&lt;p&gt;Có 3 model cơ bản trong multi threading. Đó là N:1, 1:1 và N:M
-- N:1(user space thread) là khi có nhiều thread chạy trên cùng một OS thread. Cùng một OS thread thì cho phép việc context switch rất nhanh, nhưng lại không thể tận dụng được multi core system. Tức là trong một lúc chỉ có một thread được execute, như vậy nếu 1 thread đang bị block bởi IO, thì mấy thread khác cũng không thể làm gì được.
-- 1:1(kernel thread) là 1 thread sẽ gắn với một OS thread. Cái này thì multi core được, nhưng context switch lại expensive.
-- N:M, đây là cách của Go sử dụng, chắc các bạn cũng đoán được, đó là N go routines sẽ chạy được trên M OS thread. Như vậy sẽ vừa quick context switch vừa tận dụng được multi core. Cơ mà để làm được như vậy, thì Go scheduler phải tay to, và xử lý cực kì phức tạp.&lt;/p&gt;
+&lt;p&gt;Có 3 model cơ bản trong multi threading. Đó là N:1, 1:1 và N:M&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;N:1(user space thread) là khi có nhiều thread chạy trên cùng một OS thread. Cùng một OS thread thì cho phép việc context switch rất nhanh, nhưng lại không thể tận dụng được multi core system. Tức là trong một lúc chỉ có một thread được execute, như vậy nếu 1 thread đang bị block bởi IO, thì mấy thread khác cũng không thể làm gì được.&lt;/li&gt;
+&lt;li&gt;1:1(kernel thread) là 1 thread sẽ gắn với một OS thread. Cái này thì multi core được, nhưng context switch lại expensive.&lt;/li&gt;
+&lt;li&gt;N:M, đây là cách của Go sử dụng, chắc các bạn cũng đoán được, đó là N go routines sẽ chạy được trên M OS thread. Như vậy sẽ vừa quick context switch vừa tận dụng được multi core. Cơ mà để làm được như vậy, thì Go scheduler phải tay to, và xử lý cực kì phức tạp.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h1 id=&#34;go-scheduler&#34;&gt;Go scheduler&lt;/h1&gt;
 
