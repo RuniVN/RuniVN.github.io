@@ -779,10 +779,13 @@ d = a%b
 &lt;p&gt;Ở trên mình có giới thiệu về IR. MIR là mid-level IR, trên hình trên nó nằm giữa 2 cái là HIR - cái này thường là cây AST, và LIR hay là LLVM, cái IR magic nhất mọi thời đại. :lol:&lt;/p&gt;
 
 &lt;p&gt;Vậy MIR trong Rust được sinh ra để làm gì?
-MIR là key của các việc sau:
-- Compile nhanh hơn: MIR được thiết kế để giúp compiler của Rust có thể &lt;em&gt;incremental&lt;/em&gt;. Tức là nó sẽ calculate được phần nào mới và chỉ build lại phần đó, giúp cut down được một khoản thời gian đáng kể.
-- Execute nhanh hơn: Các bạn nhìn vào hình bên trái, khi mà lúc trước chỉ có một mình thằng LLVM làm nhiệm vụ optimization, thì với MIR, một số bước optimization cho riêng Rust sẽ được thực thi.
-- Type checking chính xác hơn.&lt;/p&gt;
+MIR là key của các việc sau:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Compile nhanh hơn: MIR được thiết kế để giúp compiler của Rust có thể &lt;em&gt;incremental&lt;/em&gt;. Tức là nó sẽ calculate được phần nào mới và chỉ build lại phần đó, giúp cut down được một khoản thời gian đáng kể.&lt;/li&gt;
+&lt;li&gt;Execute nhanh hơn: Các bạn nhìn vào hình bên trái, khi mà lúc trước chỉ có một mình thằng LLVM làm nhiệm vụ optimization, thì với MIR, một số bước optimization cho riêng Rust sẽ được thực thi.&lt;/li&gt;
+&lt;li&gt;Type checking chính xác hơn.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Ở trên chỉ là những cái mà developers có thể thấy. Vậy behind the scene thì sao?&lt;/p&gt;
 
