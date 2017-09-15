@@ -676,11 +676,13 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 &lt;h1 id=&#34;q-a&#34;&gt;Q&amp;amp;A&lt;/h1&gt;
 
-&lt;p&gt;Q: Tuy context switch của goroutines rẻ, nhưng mà giờ có cả triệu goroutines thì nó cũng chậm chứ?
-A: Hỏi hay đấy, nhưng go scheduler cũng giống thread scheduler. Với các OS ngày nay thì độ phức tạp của scheduling algo là O(1). Nên việc có bao nhiêu goroutines không ảnh hưởng tới context switch cost.&lt;/p&gt;
+&lt;p&gt;Q: Tuy context switch của goroutines rẻ, nhưng mà giờ có cả triệu goroutines thì nó cũng chậm chứ?&lt;/p&gt;
 
-&lt;p&gt;Q: Ủa sao cái blocking goroutine mechanism của netpoller nhìn giống giống epoll/kqueue trong Unix vậy.
-A: Pro ghê, cách mà goroutines được xử lý khi bị blocking khá giống với event driven trong C. Thật ra under the hood thì Go cũng sử dụng epoll/kqueue luôn. Bạn có thể đọc source Go ở &lt;a href=&#34;https://golang.org/src/runtime/netpoll.go&#34;&gt;netpoller&lt;/a&gt; để tìm hiểu thêm.&lt;/p&gt;
+&lt;p&gt;A: Hỏi hay đấy, nhưng go scheduler cũng giống thread scheduler. Với các OS ngày nay thì độ phức tạp của scheduling algo là O(1). Nên việc có bao nhiêu goroutines không ảnh hưởng tới context switch cost.&lt;/p&gt;
+
+&lt;p&gt;Q: Ủa sao cái blocking goroutine mechanism của netpoller nhìn giống giống epoll/kqueue trong Unix vậy.&lt;/p&gt;
+
+&lt;p&gt;A: Pro ghê, cách mà goroutines được xử lý khi bị blocking khá giống với event driven trong C. Thật ra under the hood thì Go cũng sử dụng epoll/kqueue luôn. Bạn có thể đọc source Go ở &lt;a href=&#34;https://golang.org/src/runtime/netpoll.go&#34;&gt;netpoller&lt;/a&gt; để tìm hiểu thêm.&lt;/p&gt;
 
 &lt;h1 id=&#34;nguồn&#34;&gt;Nguồn&lt;/h1&gt;
 
