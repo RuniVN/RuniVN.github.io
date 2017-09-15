@@ -535,9 +535,12 @@ Ngoài ra GraphQL cũng giúp drops TCP requests + network round trip với sing
 
 &lt;h3 id=&#34;phân-biệt-preemptive-scheduling-và-cooperative-scheduling&#34;&gt;Phân biệt preemptive scheduling và cooperative scheduling:&lt;/h3&gt;
 
-&lt;p&gt;Tại mỗi thời điểm chỉ có một process được thực thi, vì vậy sẽ có nhiều loại scheduling CPU sao cho đạt hiệu quả tùy mục đích sử dụng nhất.
- - Preemptive scheduling là khi các process sẵn sàng nhường quyền điều khiển CPU.
- - Cooperative(hay còn gọi là non premptive): Khi một process được điều phối CPU, nó sẽ sử dụng CPU cho đến khi nó giải phóng(bằng cách kết thúc hoặc qua next state).&lt;/p&gt;
+&lt;p&gt;Tại mỗi thời điểm chỉ có một process được thực thi, vì vậy sẽ có nhiều loại scheduling CPU sao cho đạt hiệu quả tùy mục đích sử dụng nhất.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Preemptive scheduling là khi các process sẵn sàng nhường quyền điều khiển CPU.&lt;/li&gt;
+&lt;li&gt;Cooperative(hay còn gọi là non premptive): Khi một process được điều phối CPU, nó sẽ sử dụng CPU cho đến khi nó giải phóng(bằng cách kết thúc hoặc qua next state).&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h3 id=&#34;phân-biệt-process-thread-và-goroutine&#34;&gt;Phân biệt process, thread và goroutine:&lt;/h3&gt;
 
