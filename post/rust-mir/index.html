@@ -57,7 +57,7 @@
         },
         "datePublished": "2017-02-04",
         "description": "",
-        "wordCount":  1735 
+        "wordCount":  1724 
     }
     </script>
     
@@ -104,10 +104,13 @@
 
 <p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/cxmz5ldc6t_blob" class="img-center"></p>
 
-<p>Lý do:
-- Rust giống C/C++, học Rust các bạn có thể giải các bài toán liên quan tới vùng nhớ- điều mà các Rubylist, Pythonist không quan tâm.
-- Có ownership + borrow system để hỗ trợ memory safety.
-- Traits để generic.</p>
+<p>Lý do:</p>
+
+<ul>
+<li>Rust giống C/C++, học Rust các bạn có thể giải các bài toán liên quan tới vùng nhớ- điều mà các Rubylist, Pythonist không quan tâm.</li>
+<li>Có ownership + borrow system để hỗ trợ memory safety.</li>
+<li>Traits để generic.</li>
+</ul>
 
 <p>Và đặc biệt là, Rust là một ngôn ngữ <em>compiler driven</em>, tức là khi cái app bạn build nó không bị compiler nhả lỗi, bạn đã có một chương trình safe + performance. Suy ra cái đáng để tìm hiểu ở đây là compiler :troll:</p>
 
@@ -131,10 +134,13 @@ Ngoài ra còn có transpiler – dịch từ một ngôn ngữ bậc cao sang m
 
 <p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/a4x6hpr62u_blob" alt="alt text" /></p>
 
-<p>Frontend compiler: Ở phase này, mã nguồn cấp cao sẽ được transform thành IR(Intermediate Representation). <strong>Nhớ IR này nha</strong>. Các bạn tạm hiểu đây là một data structure  nằm trung gian giữa front end và backend compiler, mà được thiết kế để dễ dàng hơn trong việc optimize và translate. Một IR phải có độ chính xác tuyệt đối(có thể represent mã nguồn mà không mất thông tin). Các công việc sẽ làm ở front end bao gồm:
--   Phân tích mã nguồn, kiểm tra cú pháp và ngữ nghĩa
--   Type checking
--   Sinh ra error và warning nếu có.</p>
+<p>Frontend compiler: Ở phase này, mã nguồn cấp cao sẽ được transform thành IR(Intermediate Representation). <strong>Nhớ IR này nha</strong>. Các bạn tạm hiểu đây là một data structure  nằm trung gian giữa front end và backend compiler, mà được thiết kế để dễ dàng hơn trong việc optimize và translate. Một IR phải có độ chính xác tuyệt đối(có thể represent mã nguồn mà không mất thông tin). Các công việc sẽ làm ở front end bao gồm:</p>
+
+<ul>
+<li>Phân tích mã nguồn, kiểm tra cú pháp và ngữ nghĩa</li>
+<li>Type checking</li>
+<li>Sinh ra error và warning nếu có.</li>
+</ul>
 
 <p>Backend compiler sẽ nhận vào output của front end. Công việc chính của backend sẽ là code optimization và code generation. Backend phần nhiều sẽ hỗ trợ các nền tảng(CPU) khác nhau. Các bước optimization của backend sẽ dựa trên tập lệnh của chip.
 Ví dụ:
@@ -148,10 +154,13 @@ d = a%b
 
 <p>Vậy output của backend compiler là gì?</p>
 
-<p>Backend compiler của các ngôn ngữ sẽ produce ra các loại output khác nhau. Có 3 loại output chính:
--    Assembly code.(gcc của C)
--   Bytecodes. (javac của Java, Smalltalk)
--   Machine code. (Go compiler, Rust compiler)</p>
+<p>Backend compiler của các ngôn ngữ sẽ produce ra các loại output khác nhau. Có 3 loại output chính:</p>
+
+<ul>
+<li>Assembly code.(gcc của C)</li>
+<li>Bytecodes. (javac của Java, Smalltalk)</li>
+<li>Machine code. (Go compiler, Rust compiler)</li>
+</ul>
 
 <p>Sở dĩ có sự khác nhau này là do cách tiếp cận của các ngôn ngữ. Ví dụ Java compiler(javac) sau khi compile xong, JVM sẽ nhận input là java bytecodes từ javac, sau đó tiến hành các bước optimization bằng JIT(Just in time compiler) và translation qua machine code(ở runtime).</p>
 
@@ -210,9 +219,12 @@ break:
 
 <p>Vậy thì tại sao?</p>
 
-<p>Thứ nhất, đích đến tiếp theo của MIR sẽ là LLVM, mục tiêu là để:
-- Borrow checking
-- Optimize performance</p>
+<p>Thứ nhất, đích đến tiếp theo của MIR sẽ là LLVM, mục tiêu là để:</p>
+
+<ul>
+<li>Borrow checking</li>
+<li>Optimize performance</li>
+</ul>
 
 <p>MIR primitive sau khi thay thế sẽ xịn hơn các construct ban đầu. Điểm đặc biệt ở đây là, <code>for</code> và <code>match</code> sẽ được replace thành <code>goto</code>. Việc đưa xuống LLVM với số lượng construct càng ít sẽ được quy về các pattern càng nhỏ, dẫn đến việc optimize dễ dàng hơn.</p>
 
@@ -323,7 +335,7 @@ break:
           </a>
       </li>
 			<li class="linkedin">
-          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/rust-mir/&amp;title=MIR%20-%20S%e1%bb%b1%20tinh%20t%c3%bay%20c%e1%bb%a7a%20ch%c3%ba%20cua%20b%c3%a9%20nh%e1%bb%8f%20Rust&amp;summary=D%e1%ba%a1o%20n%c3%a0y%20Rust%20%c4%91ang%20n%e1%bb%95i%20l%c3%aan%20nh%c6%b0%20m%e1%bb%99t%20th%e1%ba%bf%20l%e1%bb%b1c%20khi%e1%ba%bfn%20m%e1%bb%99t%20hispter%20nh%c6%b0%20m%c3%acnh%20kh%c3%b4ng%20th%e1%bb%83%20kh%c3%b4ng%20%c4%91%e1%bb%83%20t%c3%a2m.%20Sau%20v%c3%a0i%20ng%c3%a0y%20dig%20deeper%20v%c3%a0o%20Rust%2c%20m%c3%acnh%20cho%20r%e1%ba%b1ng%20Rust%20l%c3%a0%20m%e1%bb%99t%20ng%c3%b4n%20ng%e1%bb%af%20kh%c3%a1%20hay%20%c4%91%e1%bb%83%20%26ldquo%3bh%e1%bb%8dc%26rdquo%3b.%0aL%c3%bd%20do%3a%20-%20Rust%20gi%e1%bb%91ng%20C%2fC%2b%2b%2c%20h%e1%bb%8dc%20Rust%20c%c3%a1c%20b%e1%ba%a1n%20c%c3%b3%20th%e1%bb%83%20gi%e1%ba%a3i%20c%c3%a1c%20b%c3%a0i%20to%c3%a1n%20li%c3%aan%20quan%20t%e1%bb%9bi%20v%c3%b9ng%20nh%e1%bb%9b-%20%c4%91i%e1%bb%81u%20m%c3%a0%20c%c3%a1c%20Rubylist%2c%20Pythonist%20kh%c3%b4ng%20quan%20t%c3%a2m.%20-%20C%c3%b3%20ownership%20%2b%20borrow%20system%20%c4%91%e1%bb%83%20h%e1%bb%97%20tr%e1%bb%a3%20memory%20safety...." class="popup">
+          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/rust-mir/&amp;title=MIR%20-%20S%e1%bb%b1%20tinh%20t%c3%bay%20c%e1%bb%a7a%20ch%c3%ba%20cua%20b%c3%a9%20nh%e1%bb%8f%20Rust&amp;summary=D%e1%ba%a1o%20n%c3%a0y%20Rust%20%c4%91ang%20n%e1%bb%95i%20l%c3%aan%20nh%c6%b0%20m%e1%bb%99t%20th%e1%ba%bf%20l%e1%bb%b1c%20khi%e1%ba%bfn%20m%e1%bb%99t%20hispter%20nh%c6%b0%20m%c3%acnh%20kh%c3%b4ng%20th%e1%bb%83%20kh%c3%b4ng%20%c4%91%e1%bb%83%20t%c3%a2m.%20Sau%20v%c3%a0i%20ng%c3%a0y%20dig%20deeper%20v%c3%a0o%20Rust%2c%20m%c3%acnh%20cho%20r%e1%ba%b1ng%20Rust%20l%c3%a0%20m%e1%bb%99t%20ng%c3%b4n%20ng%e1%bb%af%20kh%c3%a1%20hay%20%c4%91%e1%bb%83%20%26ldquo%3bh%e1%bb%8dc%26rdquo%3b.%0aL%c3%bd%20do%3a%0a%20Rust%20gi%e1%bb%91ng%20C%2fC%2b%2b%2c%20h%e1%bb%8dc%20Rust%20c%c3%a1c%20b%e1%ba%a1n%20c%c3%b3%20th%e1%bb%83%20gi%e1%ba%a3i%20c%c3%a1c%20b%c3%a0i%20to%c3%a1n%20li%c3%aan%20quan%20t%e1%bb%9bi%20v%c3%b9ng%20nh%e1%bb%9b-%20%c4%91i%e1%bb%81u%20m%c3%a0%20c%c3%a1c%20Rubylist%2c%20Pythonist%20kh%c3%b4ng%20quan%20t%c3%a2m.%20C%c3%b3%20ownership%20%2b%20borrow%20system%20%c4%91%e1%bb%83%20h%e1%bb%97%20tr%e1%bb%a3%20memory%20safety...." class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path d="M25.424,15.887v8.447h-4.896v-7.882c0-1.979-0.709-3.331-2.48-3.331c-1.354,0-2.158,0.911-2.514,1.803 c-0.129,0.315-0.162,0.753-0.162,1.194v8.216h-4.899c0,0,0.066-13.349,0-14.731h4.899v2.088c-0.01,0.016-0.023,0.032-0.033,0.048 h0.033V11.69c0.65-1.002,1.812-2.435,4.414-2.435C23.008,9.254,25.424,11.361,25.424,15.887z M5.348,2.501 c-1.676,0-2.772,1.092-2.772,2.539c0,1.421,1.066,2.538,2.717,2.546h0.032c1.709,0,2.771-1.132,2.771-2.546 C8.054,3.593,7.019,2.501,5.343,2.501H5.348z M2.867,24.334h4.897V9.603H2.867V24.334z"/>

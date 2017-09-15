@@ -708,10 +708,13 @@ Ví dụ khi gọi system call, ghi file chẳng hạn, thì trong thời gian b
 
 &lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/cxmz5ldc6t_blob&#34; class=&#34;img-center&#34;&gt;&lt;/p&gt;
 
-&lt;p&gt;Lý do:
-- Rust giống C/C++, học Rust các bạn có thể giải các bài toán liên quan tới vùng nhớ- điều mà các Rubylist, Pythonist không quan tâm.
-- Có ownership + borrow system để hỗ trợ memory safety.
-- Traits để generic.&lt;/p&gt;
+&lt;p&gt;Lý do:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Rust giống C/C++, học Rust các bạn có thể giải các bài toán liên quan tới vùng nhớ- điều mà các Rubylist, Pythonist không quan tâm.&lt;/li&gt;
+&lt;li&gt;Có ownership + borrow system để hỗ trợ memory safety.&lt;/li&gt;
+&lt;li&gt;Traits để generic.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Và đặc biệt là, Rust là một ngôn ngữ &lt;em&gt;compiler driven&lt;/em&gt;, tức là khi cái app bạn build nó không bị compiler nhả lỗi, bạn đã có một chương trình safe + performance. Suy ra cái đáng để tìm hiểu ở đây là compiler :troll:&lt;/p&gt;
 
@@ -735,10 +738,13 @@ Ngoài ra còn có transpiler – dịch từ một ngôn ngữ bậc cao sang m
 
 &lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/a4x6hpr62u_blob&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Frontend compiler: Ở phase này, mã nguồn cấp cao sẽ được transform thành IR(Intermediate Representation). &lt;strong&gt;Nhớ IR này nha&lt;/strong&gt;. Các bạn tạm hiểu đây là một data structure  nằm trung gian giữa front end và backend compiler, mà được thiết kế để dễ dàng hơn trong việc optimize và translate. Một IR phải có độ chính xác tuyệt đối(có thể represent mã nguồn mà không mất thông tin). Các công việc sẽ làm ở front end bao gồm:
--   Phân tích mã nguồn, kiểm tra cú pháp và ngữ nghĩa
--   Type checking
--   Sinh ra error và warning nếu có.&lt;/p&gt;
+&lt;p&gt;Frontend compiler: Ở phase này, mã nguồn cấp cao sẽ được transform thành IR(Intermediate Representation). &lt;strong&gt;Nhớ IR này nha&lt;/strong&gt;. Các bạn tạm hiểu đây là một data structure  nằm trung gian giữa front end và backend compiler, mà được thiết kế để dễ dàng hơn trong việc optimize và translate. Một IR phải có độ chính xác tuyệt đối(có thể represent mã nguồn mà không mất thông tin). Các công việc sẽ làm ở front end bao gồm:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Phân tích mã nguồn, kiểm tra cú pháp và ngữ nghĩa&lt;/li&gt;
+&lt;li&gt;Type checking&lt;/li&gt;
+&lt;li&gt;Sinh ra error và warning nếu có.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Backend compiler sẽ nhận vào output của front end. Công việc chính của backend sẽ là code optimization và code generation. Backend phần nhiều sẽ hỗ trợ các nền tảng(CPU) khác nhau. Các bước optimization của backend sẽ dựa trên tập lệnh của chip.
 Ví dụ:
@@ -752,10 +758,13 @@ d = a%b
 
 &lt;p&gt;Vậy output của backend compiler là gì?&lt;/p&gt;
 
-&lt;p&gt;Backend compiler của các ngôn ngữ sẽ produce ra các loại output khác nhau. Có 3 loại output chính:
--    Assembly code.(gcc của C)
--   Bytecodes. (javac của Java, Smalltalk)
--   Machine code. (Go compiler, Rust compiler)&lt;/p&gt;
+&lt;p&gt;Backend compiler của các ngôn ngữ sẽ produce ra các loại output khác nhau. Có 3 loại output chính:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Assembly code.(gcc của C)&lt;/li&gt;
+&lt;li&gt;Bytecodes. (javac của Java, Smalltalk)&lt;/li&gt;
+&lt;li&gt;Machine code. (Go compiler, Rust compiler)&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Sở dĩ có sự khác nhau này là do cách tiếp cận của các ngôn ngữ. Ví dụ Java compiler(javac) sau khi compile xong, JVM sẽ nhận input là java bytecodes từ javac, sau đó tiến hành các bước optimization bằng JIT(Just in time compiler) và translation qua machine code(ở runtime).&lt;/p&gt;
 
@@ -814,9 +823,12 @@ break:
 
 &lt;p&gt;Vậy thì tại sao?&lt;/p&gt;
 
-&lt;p&gt;Thứ nhất, đích đến tiếp theo của MIR sẽ là LLVM, mục tiêu là để:
-- Borrow checking
-- Optimize performance&lt;/p&gt;
+&lt;p&gt;Thứ nhất, đích đến tiếp theo của MIR sẽ là LLVM, mục tiêu là để:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Borrow checking&lt;/li&gt;
+&lt;li&gt;Optimize performance&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;MIR primitive sau khi thay thế sẽ xịn hơn các construct ban đầu. Điểm đặc biệt ở đây là, &lt;code&gt;for&lt;/code&gt; và &lt;code&gt;match&lt;/code&gt; sẽ được replace thành &lt;code&gt;goto&lt;/code&gt;. Việc đưa xuống LLVM với số lượng construct càng ít sẽ được quy về các pattern càng nhỏ, dẫn đến việc optimize dễ dàng hơn.&lt;/p&gt;
 
