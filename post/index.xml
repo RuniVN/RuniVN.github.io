@@ -17,11 +17,11 @@
       <guid>https://runivn.github.io/post/go-convey/</guid>
       <description>
 
-&lt;p&gt;Lần này mình sẽ review về một Go lib khá hay ho - &lt;a href=&#34;https://github.com/smartystreets/goconvey&#34;&gt;GoConvey&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Lần này mình sẽ review về một Go lib hay ho - &lt;a href=&#34;https://github.com/smartystreets/goconvey&#34;&gt;GoConvey&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;tl-dr&#34;&gt;TL;DR&lt;/h2&gt;
 
-&lt;p&gt;Đây là một lib hỗ trợ testing trong Go.&lt;/p&gt;
+&lt;p&gt;Một fancy testing tool cho Gophers. Có hỗ trợ Browser UI và một vài concept theo mình là khá hay.&lt;/p&gt;
 
 &lt;h2 id=&#34;một-số-đặc-điểm&#34;&gt;Một số đặc điểm&lt;/h2&gt;
 
