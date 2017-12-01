@@ -6,8 +6,205 @@
     <description>Recent content on Runi blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Jul 2017 16:45:32 +0700</lastBuildDate>
+    <lastBuildDate>Fri, 01 Dec 2017 16:45:32 +0700</lastBuildDate>
     <atom:link href="https://runivn.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>[Lib hay mỗi tuần] Goconvey - Thay đổi cách test của bạn</title>
+      <link>https://runivn.github.io/post/go-convey/</link>
+      <pubDate>Fri, 01 Dec 2017 16:45:32 +0700</pubDate>
+      
+      <guid>https://runivn.github.io/post/go-convey/</guid>
+      <description>
+
+&lt;p&gt;Lần này mình sẽ review về một Go lib khá hay ho - &lt;a href=&#34;https://github.com/smartystreets/goconvey&#34;&gt;GoConvey&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;tl-dr&#34;&gt;TL;DR&lt;/h2&gt;
+
+&lt;p&gt;Đây là một lib hỗ trợ testing trong Go.&lt;/p&gt;
+
+&lt;h2 id=&#34;một-số-đặc-điểm&#34;&gt;Một số đặc điểm&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Behaviral test&lt;/li&gt;
+&lt;li&gt;Broswer UI integration (cho cả go test native)&lt;/li&gt;
+&lt;li&gt;Output rất đẹp mắt :))&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;cách-cài-đặt&#34;&gt;Cách cài đặt&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;go get github.com/smartystreets/goconvey&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;cách-sử-dụng&#34;&gt;Cách sử dụng&lt;/h2&gt;
+
+&lt;p&gt;Giờ mình sẽ có vài cái hàm đơn giản như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+func Add(a, b int) int {
+	return a + b
+}
+
+func Subtract(a, b int) int {
+	return a - b
+}
+
+func Multiply(a, b int) int {
+	return a * b
+}
+
+func Division(a, b int) (int, error) {
+	if b == 0 {
+		return 0, errors.New(&amp;quot;can not divide by zero&amp;quot;)
+	}
+	return a / b, nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Giờ test nó bằng Covey xem sao.&lt;/p&gt;
+
+&lt;p&gt;Để sử dụng thì các bạn import &lt;code&gt;. &amp;quot;github.com/smartystreets/goconvey/convey&amp;quot;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Dấu &amp;ldquo;.&amp;rdquo; ở đây cho phép được dùng thẳng function trong convey luôn mà không cần gọi thông qua identifier (gọi thẳng Convey thay vì convey.Convey). Code sẽ nhìn clear hơn.&lt;/p&gt;
+
+&lt;p&gt;Test thử hàm Add&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func TestAdd(t *testing.T) {
+	Convey(&amp;quot;Add two numbers&amp;quot;, t, func() {
+		So(Add(1, 2), ShouldEqual, 3)
+	})
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Một function test sẽ bắt đầu bằng từ khóa &lt;code&gt;Convey&lt;/code&gt;. Ở trên hàm TestAdd sẽ thử  dùng hàm Add cộng 2 số 1 và 2 và test xem thử có đúng bằng 3 không.
+Việc assert ở đây là thông qua từ khóa &lt;code&gt;So&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Các bạn có thể thấy giống như viết văn vậy: &lt;em&gt;So Add(1,2) should equal 3&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Viết thử hàm khó hơn xem. Hàm chia. Hàm chia thì mình cần phải xét thêm 1 điều kiện là chia cho 0. Hàm test của chúng ta có nội dung như sau.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func TestDivision(t *testing.T) {
+	Convey(&amp;quot;Divide one by another&amp;quot;, t, func() {
+
+		Convey(&amp;quot;Divide by non-zero number&amp;quot;, func() {
+			num, err := Division(10, 2)
+			So(err, ShouldBeNil)
+			So(num, ShouldEqual, 5)
+		})
+
+		Convey(&amp;quot;Divide by zero&amp;quot;, func() {
+			_, err := Division(10, 0)
+			So(err, ShouldNotBeNil)
+		})
+	})
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Dễ hiểu quá đúng không?&lt;/p&gt;
+
+&lt;p&gt;Khi chạy chúng ta chạy bằng lệnh go test builtin của go. Kết quả sẽ được:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/c92bb2v76j_Screen%20Shot%202017-11-30%20at%2010.57.10%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Với mỗi &lt;code&gt;So&lt;/code&gt; pass chúng ta sẽ được 1 dấu tick. Khi bạn viết assert nhiều value thì sẽ ra nhiều dấu tick rất đẹp mắt. &lt;code&gt;So&lt;/code&gt; fail thì sẽ ra dấu &lt;code&gt;X&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Goconvey ngoài ra còn giúp chúng ta visualize testcases thông qua web portal.&lt;/p&gt;
+
+&lt;p&gt;Các bạn chạy command &lt;code&gt;goconvey&lt;/code&gt;. Nó sẽ đưa các bạn đến trình duyệt ở địa chỉ &lt;a href=&#34;http://127.0.0.1:8080/&#34;&gt;http://127.0.0.1:8080/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/yoxxe8lgj6_Screen%20Shot%202017-11-30%20at%2011.00.12%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So cool!&lt;/p&gt;
+
+&lt;h1 id=&#34;execution-order&#34;&gt;Execution Order&lt;/h1&gt;
+
+&lt;p&gt;Một điểm đặc biệt sẽ khiến hầu hết các bạn what the heck trong lần đầu tiên dùng convey là: &amp;ldquo;Quái sao cái giá trị của mình nó lúc thế này lúc thế kia vậy???&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Lấy một ví dụ nhé&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func TestSomething(t *testing.T) {
+	Convey(&amp;quot;Prepare&amp;quot;, t, func() {
+		a := 1
+		b := 2
+		Convey(&amp;quot;Add 1&amp;quot;, func() {
+			a = a + 1
+			So(a, ShouldEqual, 2)
+			b = b + 1
+			So(b, ShouldEqual, 3)
+		})
+
+		Convey(&amp;quot;Subtract 1 &amp;quot;, func() {
+			a = a - 1
+			So(a, ShouldEqual, ??)
+			b = b - 1
+			So(b, ShouldEqual, ??)
+		})
+	})
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Theo các bạn thì ví dụ ở trên giá trị tương ứng với 2 dấu &lt;code&gt;??&lt;/code&gt;là gì?
+Nhìn thì trên xuống, a = 1, b = 2. Sau khi đi qua hàm &lt;code&gt;Add 1&lt;/code&gt; thì a = 2, b = 3. Sau khi đi qua  &lt;code&gt;Subtract 1&lt;/code&gt; thì a lại về 1 và b về 2 đúng không?&lt;/p&gt;
+
+&lt;p&gt;Hoàn toàn không. Kết quả sẽ là a = 0 và b = 1.
+&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/q3xdoz9wgf_Screen%20Shot%202017-11-30%20at%2011.14.20%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;hellip; What the heck? Giá trị của &lt;code&gt;a&lt;/code&gt; unexpected. Well xin giới thiệu với các bạn, execution order của Convey:&lt;/p&gt;
+
+&lt;p&gt;Ví dụ có structure convey như sau&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Convey A
+    So 1
+    Convey B
+        So 2
+    Convey C
+        So 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Thứ tự thực hiện không phải là &lt;code&gt;A1B2C3&lt;/code&gt; nhé. Mà là &lt;code&gt;A1B2A1C3&lt;/code&gt;. :))&lt;/p&gt;
+
+&lt;p&gt;Convey có thứ tự execution như vậy là để hỗ trợ setup và tear down một cách tự nhiên hơn.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;			Convey(&amp;quot;Create&amp;quot;, func() {
+				Convey(&amp;quot;Success&amp;quot;, func() {
+					accountID := uuid.NewV4().String()
+					role := randomRole(accountID, randomdata.StringNumber(4, &amp;quot;-&amp;quot;))
+					_, err = core.CreateRole(role)
+					So(err, ShouldBeNil)
+
+					Reset(func() {
+						arango.TruncateCollectionForTesting(
+							cArango.RoleCollection,
+						)
+					})
+
+					Convey(&amp;quot;AlreadyExist&amp;quot;, func() {
+						role.ID = &amp;quot;&amp;quot;
+						_, err := core.CreateRole(role)
+						So(err, ShouldEqual, ErrRoleAlreadyExists)
+					})
+
+					Convey(&amp;quot;GetByID&amp;quot;, func() {
+						r, err := core.GetRoleByID(role.ID)
+						So(err, ShouldBeNil)
+						So(r, ShouldResemble, role)
+					})
+
+					Convey(&amp;quot;GetByType&amp;quot;, func() {
+						r, err := core.GetRoleByType(role.Type)
+						So(err, ShouldBeNil)
+						So(r, ShouldResemble, role)
+					})
+         })
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ví dụ như đoạn code trên, việc setup teardown của mình chỉ cần khai báo một lần. Và các Convey phía sau sẽ có isolated context, giúp cho các test cases của mình không depend lẫn nhau.&lt;/p&gt;
+
+&lt;h2 id=&#34;tổng-kết&#34;&gt;Tổng kết&lt;/h2&gt;
+
+&lt;p&gt;Xài Coney đi.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Truyện tự viết - Biết đâu là định mệnh(p2)</title>

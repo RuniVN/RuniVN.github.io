@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://runivn.github.io/post/go-convey/</loc>
+    <lastmod>2017-12-01T16:45:32+07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://runivn.github.io/post/biet-dau-la-dinh-menh-2/</loc>
     <lastmod>2017-07-29T16:45:32+07:00</lastmod>
   </url>
@@ -53,13 +58,13 @@
   
   <url>
     <loc>https://runivn.github.io/post/</loc>
-    <lastmod>2017-07-29T16:45:32+07:00</lastmod>
+    <lastmod>2017-12-01T16:45:32+07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://runivn.github.io/</loc>
-    <lastmod>2017-07-29T16:45:32+07:00</lastmod>
+    <lastmod>2017-12-01T16:45:32+07:00</lastmod>
     <priority>0</priority>
   </url>
   
