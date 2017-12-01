@@ -57,7 +57,7 @@
         },
         "datePublished": "2017-12-01",
         "description": "",
-        "wordCount":  789 
+        "wordCount":  792 
     }
     </script>
     
@@ -113,6 +113,7 @@
 <li>Browser UI integration (cho cả go test native)</li>
 <li>Output rất đẹp mắt :))</li>
 <li>Concept về execution order thú vị giúp setup + teardown một cách tự nhiên</li>
+<li>Isolated test cases</li>
 </ul>
 
 <h2 id="cách-cài-đặt">Cách cài đặt</h2>
@@ -321,7 +322,7 @@ Nhìn thì trên xuống, a = 1, b = 2. Sau khi đi qua hàm <code>Add 1</code> 
           </a>
       </li>
 			<li class="linkedin">
-          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/go-convey/&amp;title=%5bLib%20hay%20m%e1%bb%97i%20tu%e1%ba%a7n%5d%20Goconvey%20-%20Thay%20%c4%91%e1%bb%95i%20c%c3%a1ch%20test%20c%e1%bb%a7a%20b%e1%ba%a1n&amp;summary=L%e1%ba%a7n%20n%c3%a0y%20m%c3%acnh%20s%e1%ba%bd%20review%20v%e1%bb%81%20m%e1%bb%99t%20Go%20lib%20hay%20ho%20-%20GoConvey%0aTL%3bDR%20M%e1%bb%99t%20fancy%20testing%20tool%20cho%20Gophers.%20C%c3%b3%20h%e1%bb%97%20tr%e1%bb%a3%20Browser%20UI%20v%c3%a0%20m%e1%bb%99t%20v%c3%a0i%20concept%20theo%20m%c3%acnh%20l%c3%a0%20kh%c3%a1%20hay.%0aM%e1%bb%99t%20s%e1%bb%91%20%c4%91%e1%ba%b7c%20%c4%91i%e1%bb%83m%20%20Behavioral%20test%20Browser%20UI%20integration%20%28cho%20c%e1%ba%a3%20go%20test%20native%29%20Output%20r%e1%ba%a5t%20%c4%91%e1%ba%b9p%20m%e1%ba%aft%20%3a%29%29%20Concept%20v%e1%bb%81%20execution%20order%20th%c3%ba%20v%e1%bb%8b%20gi%c3%bap%20setup%20%2b%20teardown%20m%e1%bb%99t%20c%c3%a1ch%20t%e1%bb%b1%20nhi%c3%aan%20%20C%c3%a1ch%20c%c3%a0i%20%c4%91%e1%ba%b7t%20go%20get%20github...." class="popup">
+          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://runivn.github.io/post/go-convey/&amp;title=%5bLib%20hay%20m%e1%bb%97i%20tu%e1%ba%a7n%5d%20Goconvey%20-%20Thay%20%c4%91%e1%bb%95i%20c%c3%a1ch%20test%20c%e1%bb%a7a%20b%e1%ba%a1n&amp;summary=L%e1%ba%a7n%20n%c3%a0y%20m%c3%acnh%20s%e1%ba%bd%20review%20v%e1%bb%81%20m%e1%bb%99t%20Go%20lib%20hay%20ho%20-%20GoConvey%0aTL%3bDR%20M%e1%bb%99t%20fancy%20testing%20tool%20cho%20Gophers.%20C%c3%b3%20h%e1%bb%97%20tr%e1%bb%a3%20Browser%20UI%20v%c3%a0%20m%e1%bb%99t%20v%c3%a0i%20concept%20theo%20m%c3%acnh%20l%c3%a0%20kh%c3%a1%20hay.%0aM%e1%bb%99t%20s%e1%bb%91%20%c4%91%e1%ba%b7c%20%c4%91i%e1%bb%83m%20%20Behavioral%20test%20Browser%20UI%20integration%20%28cho%20c%e1%ba%a3%20go%20test%20native%29%20Output%20r%e1%ba%a5t%20%c4%91%e1%ba%b9p%20m%e1%ba%aft%20%3a%29%29%20Concept%20v%e1%bb%81%20execution%20order%20th%c3%ba%20v%e1%bb%8b%20gi%c3%bap%20setup%20%2b%20teardown%20m%e1%bb%99t%20c%c3%a1ch%20t%e1%bb%b1%20nhi%c3%aan%20Isolated%20test%20cases%20%20C%c3%a1ch%20c%c3%a0i%20%c4%91%e1%ba%b7t%20go%20get%20github...." class="popup">
               <span class="icon">
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
                       <path d="M25.424,15.887v8.447h-4.896v-7.882c0-1.979-0.709-3.331-2.48-3.331c-1.354,0-2.158,0.911-2.514,1.803 c-0.129,0.315-0.162,0.753-0.162,1.194v8.216h-4.899c0,0,0.066-13.349,0-14.731h4.899v2.088c-0.01,0.016-0.023,0.032-0.033,0.048 h0.033V11.69c0.65-1.002,1.812-2.435,4.414-2.435C23.008,9.254,25.424,11.361,25.424,15.887z M5.348,2.501 c-1.676,0-2.772,1.092-2.772,2.539c0,1.421,1.066,2.538,2.717,2.546h0.032c1.709,0,2.771-1.132,2.771-2.546 C8.054,3.593,7.019,2.501,5.343,2.501H5.348z M2.867,24.334h4.897V9.603H2.867V24.334z"/>
