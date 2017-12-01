@@ -29,6 +29,7 @@
 &lt;li&gt;Behavioral test&lt;/li&gt;
 &lt;li&gt;Browser UI integration (cho cả go test native)&lt;/li&gt;
 &lt;li&gt;Output rất đẹp mắt :))&lt;/li&gt;
+&lt;li&gt;Concept về execution order thú vị giúp setup + teardown một cách tự nhiên&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;cách-cài-đặt&#34;&gt;Cách cài đặt&lt;/h2&gt;
