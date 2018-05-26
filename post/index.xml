@@ -75,9 +75,12 @@
 
 &lt;p&gt;Khi bạn enable 2FA cho tài khoản của mình, bạn sẽ nhận được một secret key based 32. Tùy vào mức độ security, độ dài của secret key có thể là 80, 128 hoặc 160 bit.&lt;/p&gt;
 
-&lt;p&gt;Các authenticator application sẽ scan secret này dưới dạng QR code (hoặc manually) và dùng nó để generate ra một HMAC-SHA1. Chuỗi HMAC này có thể là một trong 2 dạng:
-- &lt;a href=&#34;https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm&#34;&gt;TOTP&lt;/a&gt;
-- &lt;a href=&#34;https://en.wikipedia.org/wiki/HMAC-based_One-time_Password_algorithm&#34;&gt;HOTP&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Các authenticator application sẽ scan secret này dưới dạng QR code (hoặc manually) và dùng nó để generate ra một HMAC-SHA1. Chuỗi HMAC này có thể là một trong 2 dạng:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm&#34;&gt;TOTP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HMAC-based_One-time_Password_algorithm&#34;&gt;HOTP&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Sau đó HMAC này sẽ được extracted và lấy ra 1 số int 4 byte, đó chính là code.&lt;/p&gt;
 
@@ -85,9 +88,12 @@
 
 &lt;h3 id=&#34;backup-codes&#34;&gt;Backup codes&lt;/h3&gt;
 
-&lt;p&gt;Backup codes hay recovery codes sẽ được sử dụng trong trường hợp bạn không thể sử dụng điện thoại, bạn có thể dùng chúng để đăng nhập. Có 2 loại backup codes:
-- Multiple backup codes: Ví dụ github sẽ cho bạn 10 codes, và mỗi code sẽ được sử dụng 1 lần.
-- Single backup code: Bạn dùng cái code này đồng nghĩa với việc bạn có thể đăng nhập, nhưng phải setup lại 2FA (nó assume bạn bị mất điện thoại).&lt;/p&gt;
+&lt;p&gt;Backup codes hay recovery codes sẽ được sử dụng trong trường hợp bạn không thể sử dụng điện thoại, bạn có thể dùng chúng để đăng nhập. Có 2 loại backup codes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Multiple backup codes: Ví dụ github sẽ cho bạn 10 codes, và mỗi code sẽ được sử dụng 1 lần.&lt;/li&gt;
+&lt;li&gt;Single backup code: Bạn dùng cái code này đồng nghĩa với việc bạn có thể đăng nhập, nhưng phải setup lại 2FA (nó assume bạn bị mất điện thoại).&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&#34;làm-thế-nào-để-apply-2fa-vào-dự-án-của-mình&#34;&gt;Làm thế nào để apply 2FA vào dự án của mình?&lt;/h2&gt;
 
