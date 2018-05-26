@@ -6,8 +6,153 @@
     <description>Recent content in Posts on Runi blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Dec 2017 16:45:32 +0700</lastBuildDate>
+    <lastBuildDate>Fri, 25 May 2018 16:45:32 +0700</lastBuildDate>
     <atom:link href="https://runivn.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Bảo mật 2 lớp và ứng dụng (Go code demo)</title>
+      <link>https://runivn.github.io/post/2fa/</link>
+      <pubDate>Fri, 25 May 2018 16:45:32 +0700</pubDate>
+      
+      <guid>https://runivn.github.io/post/2fa/</guid>
+      <description>
+
+&lt;p&gt;Trong thế giới của việc thông tin cá nhân đang ngày càng bị xâm phạm và tấn công, đến thời điểm này đã có gần &lt;a href=&#34;https://breachlevelindex.com/&#34;&gt;10 tỷ&lt;/a&gt; accounts bị leaked thì chuyện phải implement một phương pháp đăng nhập có tính bảo mật cao hơn là một chuyện bất cứ cá nhân/tổ chức nào cũng aware được.&lt;/p&gt;
+
+&lt;p&gt;Two-factor Authentication là một trong số đó. Trong bài này mình sẽ chia sẻ những kiến thức đã tổng hợp được trong quá trình làm việc với 2FA.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/7gklibkwls_image.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;two-factor-authentication-2fa-là-gì&#34;&gt;Two-Factor Authentication (2FA) là gì?&lt;/h2&gt;
+
+&lt;p&gt;Two-Factor Authentication (2FA) hay còn gọi là Bảo mật 2 lớp, là một phương thức để chứng thực user bằng việc combine 2 factors khác nhau từ bộ source:
+- Một cái gì đó bạn biết.
+- Một cái gì đó bạn có.
+- Một cái gì đó mà nó mặc nhiên như vậy.&lt;/p&gt;
+
+&lt;p&gt;Một ví dụ khá cơ bản của 2FA đó là khi bạn rút tiền ở ATM, bạn cần 2 thứ, một là cái thẻ (bạn có) và mã PIN (bạn biết) mới có khả năng thực hiện rút tiền.&lt;/p&gt;
+
+&lt;p&gt;Như vậy nó áp dụng trong online authentication như thế nào?&lt;/p&gt;
+
+&lt;p&gt;Với bảo mật thông thường, bạn chỉ cần nhập username và password để đăng nhập tài khoản của mình, thứ bảo vệ duy nhất của bạn là mật khẩu. Đây là cái mà &amp;ldquo;bạn biết&amp;rdquo;. 2FA sẽ thêm một extra layer để bạn cần provide cái mà &amp;ldquo;bạn có&amp;rdquo; nữa.&lt;/p&gt;
+
+&lt;h2 id=&#34;các-loại-2fa&#34;&gt;Các loại 2FA&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Hardware Token&lt;/li&gt;
+&lt;li&gt;SMS/Voice based&lt;/li&gt;
+&lt;li&gt;Software Token&lt;/li&gt;
+&lt;li&gt;Push notification&lt;/li&gt;
+&lt;li&gt;Các loại khác&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Như bạn thấy, có rất nhiều cách để mô phỏng cái mà &amp;ldquo;bạn có&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Chẳng hạn, SMS là một sự lựa chọn không tồi, server gửi SMS về cho user để đăng nhập. Nhưng SMS lại ko quá an toàn (có thể bị intercepted), và bị vấn đề về network, việc delay có thể làm ảnh hưởng tới authentication process.&lt;/p&gt;
+
+&lt;p&gt;Vì nhiều lí do khác nhau nên team quyết định chọn dùng Software Token cho 2FA. Và từ bây giờ trong bài viết mình 2FA cũng được ám chỉ tới phương pháp sử dụng cryptographically key của Software Token.&lt;/p&gt;
+
+&lt;h2 id=&#34;2fa-hoạt-động-như-thế-nào&#34;&gt;2FA hoạt động như thế nào?&lt;/h2&gt;
+
+&lt;p&gt;Mình lấy ví dụ gitlab.
+Đây là lúc đăng nhập, mình sẽ provide user và password.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/qg21xb61c9_Screen%20Shot%202018-05-25%20at%203.15.24%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Sau khi đăng nhập xong, vì mình có enable 2FA nên nó sẽ redirect mình tới trang điền code (soft token).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/wi0hndhayn_Screen%20Shot%202018-05-25%20at%203.15.33%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Code này sẽ được lấy từ Authentication application, có thể là Authy, Google authenticator &amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/mui8qfsb9c_Screen%20Shot%202018-05-25%20at%204.43.50%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ví dụ như mình dùng Authy để lấy được code. Mỗi code sẽ được thay đổi sau 30s.&lt;/p&gt;
+
+&lt;p&gt;Với code này mình sẽ đăng nhập thành công.&lt;/p&gt;
+
+&lt;h2 id=&#34;cơ-chế-hoạt-động-internally-của-2fa&#34;&gt;Cơ chế hoạt động internally của 2FA&lt;/h2&gt;
+
+&lt;p&gt;Khi bạn enable 2FA cho tài khoản của mình, bạn sẽ nhận được một secret key based 32. Tùy vào mức độ security, độ dài của secret key có thể là 80, 128 hoặc 160 bit.&lt;/p&gt;
+
+&lt;p&gt;Các authenticator application sẽ scan secret này dưới dạng QR code (hoặc manually) và dùng nó để generate ra một HMAC-SHA1. Chuỗi HMAC này có thể là một trong 2 dạng:
+- &lt;a href=&#34;https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm&#34;&gt;TOTP&lt;/a&gt;
+- &lt;a href=&#34;https://en.wikipedia.org/wiki/HMAC-based_One-time_Password_algorithm&#34;&gt;HOTP&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Sau đó HMAC này sẽ được extracted và lấy ra 1 số int 4 byte, đó chính là code.&lt;/p&gt;
+
+&lt;p&gt;Một mã code sẽ valid trong 30 giây. Tuy nhiên không phải ai cũng có clock synced giống nhau, vì network latency các kiểu nên thường mọi người hay cho phép ở phạm vi cộng trừ 1 code, tức là 1 code sẽ valid trong 1 phút 30 giây. Điều này có thể giảm tính an toàn, nhưng lại tăng sự trải nghiệm đáng kể.&lt;/p&gt;
+
+&lt;h3 id=&#34;backup-codes&#34;&gt;Backup codes&lt;/h3&gt;
+
+&lt;p&gt;Backup codes hay recovery codes sẽ được sử dụng trong trường hợp bạn không thể sử dụng điện thoại, bạn có thể dùng chúng để đăng nhập. Có 2 loại backup codes:
+- Multiple backup codes: Ví dụ github sẽ cho bạn 10 codes, và mỗi code sẽ được sử dụng 1 lần.
+- Single backup code: Bạn dùng cái code này đồng nghĩa với việc bạn có thể đăng nhập, nhưng phải setup lại 2FA (nó assume bạn bị mất điện thoại).&lt;/p&gt;
+
+&lt;h2 id=&#34;làm-thế-nào-để-apply-2fa-vào-dự-án-của-mình&#34;&gt;Làm thế nào để apply 2FA vào dự án của mình?&lt;/h2&gt;
+
+&lt;p&gt;Khá đơn giản, hầu hết ngôn ngữ đều open source implementation của mình. Mình code Go, library mà mình chọn là &lt;code&gt;github.com/dgryski/dgoogauth&lt;/code&gt; được viết bởi Damian Gryski, một gopher rất nổi tiếng.&lt;/p&gt;
+
+&lt;p&gt;Flow chương trình
+&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/hnxlni0dqr_Screen%20Shot%202018-05-25%20at%206.07.49%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Khi một user muốn enable 2FA, App sẽ gọi &lt;code&gt;RequestGenerate2FA&lt;/code&gt; API.&lt;/p&gt;
+
+&lt;p&gt;Trong API này sẽ generate ra một temporary secret và lưu vào redis, trong thời gian expire 5 phút.&lt;/p&gt;
+
+&lt;p&gt;GenerateSecret thì khá đơn giản thôi.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// GenerateSecret generates a 10 byte secret string.
+func GenerateSecret() (string, error) {
+	random := make([]byte, 10)
+	_, err := rand.Read(random)
+	if err != nil {
+		return &amp;quot;&amp;quot;, err
+	}
+	return base32.StdEncoding.EncodeToString(random), nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sau khi app nhận được secret, sẽ turn thành QR code và đưa cho user. QR code này sẽ được user dùng Authenticator application để quét.&lt;/p&gt;
+
+&lt;p&gt;Khi đã có code, user input vào và app sẽ tiếp tục make request lên API &lt;code&gt;Generate2FA&lt;/code&gt;. Nếu thành công thì user đã được enable 2FA.&lt;/p&gt;
+
+&lt;p&gt;Trong hàm &lt;code&gt;Generate2FA&lt;/code&gt; chúng ta cần verify được code gửi lên và secret lấy từ redis có valid hay không. Sử dụng library trên như sau:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;otpc := &amp;amp;dgoogauth.OTPConfig{
+      Secret:      info.Secret,
+      WindowSize:  3,
+      HotpCounter: 0,
+}
+
+valid, err := otpc.Authenticate(req.Code)
+if err != nil || !valid {
+	return errors.New(&amp;quot;Invalid authenticate code&amp;quot;)
+}
+
+// success validation
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(Các bạn có thể đọc thêm source code để biết function Authenticate hoạt động như thế nào, chỉ có 1 file thôi, rất đơn giản).&lt;/p&gt;
+
+&lt;p&gt;Sau khi validate xong thì mình trả về Recovery codes luôn (cho tiện ở phía application).&lt;/p&gt;
+
+&lt;p&gt;Còn đây thì flow khi login, nếu cần thêm 2FA thì sẽ require code từ user, sau đó upgrade cái access token đó (simply add thêm 1 fields &lt;code&gt;2fa: true&lt;/code&gt;) để nhận dạng là đã 2FA authenticated rồi.
+&lt;img src=&#34;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/gvri4aj6di_Screen%20Shot%202018-05-25%20at%206.11.36%20PM.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;kết-luận&#34;&gt;Kết luận&lt;/h2&gt;
+
+&lt;p&gt;2FA là một kĩ thuật dùng để enhance security layer của một application. Hay nói cách khác, bạn khóa 1 cửa bằng 2 cái khóa luôn an toàn hơn 1 cái. Trong xã hội đầy loạn lạc này thì ứng dụng nào quan trọng, chứa nhiều sensitive data và liên quan tới tiền bạc thì cứ auto bật 2FA thôi.&lt;/p&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://engineering.gosquared.com/building-two-factor-authentication&#34;&gt;https://engineering.gosquared.com/building-two-factor-authentication&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://authy.com/what-is-2fa/&#34;&gt;https://authy.com/what-is-2fa/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>[Lib hay mỗi tuần] Goconvey - Thay đổi cách test của bạn</title>
