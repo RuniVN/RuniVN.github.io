@@ -25,10 +25,13 @@
 
 &lt;h2 id=&#34;two-factor-authentication-2fa-là-gì&#34;&gt;Two-Factor Authentication (2FA) là gì?&lt;/h2&gt;
 
-&lt;p&gt;Two-Factor Authentication (2FA) hay còn gọi là Bảo mật 2 lớp, là một phương thức để chứng thực user bằng việc combine 2 factors khác nhau từ bộ source:
-- Một cái gì đó bạn biết.
-- Một cái gì đó bạn có.
-- Một cái gì đó mà nó mặc nhiên như vậy.&lt;/p&gt;
+&lt;p&gt;Two-Factor Authentication (2FA) hay còn gọi là Bảo mật 2 lớp, là một phương thức để chứng thực user bằng việc combine 2 factors khác nhau từ bộ source:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Một cái gì đó bạn biết.&lt;/li&gt;
+&lt;li&gt;Một cái gì đó bạn có.&lt;/li&gt;
+&lt;li&gt;Một cái gì đó mà nó mặc nhiên như vậy.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Một ví dụ khá cơ bản của 2FA đó là khi bạn rút tiền ở ATM, bạn cần 2 thứ, một là cái thẻ (bạn có) và mã PIN (bạn biết) mới có khả năng thực hiện rút tiền.&lt;/p&gt;
 
