@@ -57,7 +57,7 @@
         },
         "datePublished": "2016-02-26",
         "description": "",
-        "wordCount":  678 
+        "wordCount":  676 
     }
     </script>
     
@@ -82,7 +82,7 @@
 
             <p style="font-size:15px">Mình thích Elixir, idol Rust và code Go hàng ngày.<p>
 <p style="font-size:15px">Mình là Vim user, và hay dùng spacemacs để chơi tetrix.<p>
-<p style="font-size:15px">Mình là Backend Engineer ở <a href="https://www.kakaolabs.com">Kakaolabs</a> cũng là organizer của <a href="https://wwww.facebook.com/golang.org.vn">Golang VietNam.</a><p>
+<p style="font-size:15px">Mình là Engineer Manager ở <a href="https://www.be.xyz">be</a> cũng là organizer của <a href="https://wwww.facebook.com/golang.org.vn">Golang VietNam.</a><p>
 
         </header>
 
@@ -121,75 +121,76 @@ Cách làm của mình sẽ là: Dùng selenium chạy trang amazon lên, đợi
 
 <p>Để chạy, chúng ta vào thư mục chứa file jar và chạy câu lệnh:</p>
 
-<p><code>java -jar selenium-server-standalone-2.50.1.jar -port 8081</code></p>
+<pre><code class="language-java">
+![alt text](https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-02-26%20at%203.57.22%20PM.png_uka1cbcuxl)
 
-<p><img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/Screen%20Shot%202016-02-26%20at%203.57.22%20PM.png_uka1cbcuxl" alt="alt text" /></p>
+=&gt;&gt; Chúng ta được một server selenium chạy ở port 8081.
 
-<p>=&gt;&gt; Chúng ta được một server selenium chạy ở port 8081.</p>
+Tiếp theo các bạn kéo goselenium về bằng go get:
 
-<p>Tiếp theo các bạn kéo goselenium về bằng go get:</p>
+```go get sourcegraph.com/github.com/sourcegraph/go-selenium```
 
-<p><code>go get sourcegraph.com/github.com/sourcegraph/go-selenium</code></p>
+Việc kế tiếp là cài đặt browser, mình chọn Firefox. Các bạn lưu ý, khi chạy trên local thì chỉ cần cài đặt Firefox trên web là được. Còn khi setup trên host thì các bạn cần cài đặt firefox bằng shell script. Các bạn có thể tham khảo [cách setup selenium trên Ubuntu 14.04](https://gist.github.com/curtismcmullan/7be1a8c1c841a9d8db2c)
 
-<p>Việc kế tiếp là cài đặt browser, mình chọn Firefox. Các bạn lưu ý, khi chạy trên local thì chỉ cần cài đặt Firefox trên web là được. Còn khi setup trên host thì các bạn cần cài đặt firefox bằng shell script. Các bạn có thể tham khảo <a href="https://gist.github.com/curtismcmullan/7be1a8c1c841a9d8db2c">cách setup selenium trên Ubuntu 14.04</a></p>
+Setup đã xong! Giờ vào code Go thôi.
 
-<p>Setup đã xong! Giờ vào code Go thôi.</p>
-
-<p>Chúng ta cần:
+Chúng ta cần:
 - Remote vào server selenium
 - Truy xuất tới đường dẫn amazon deal
-- Tiến hành phân tích HTML để lấy thông tin, mình sẽ in ra thông tin page title và image sản phẩm đầu tiên.</p>
+- Tiến hành phân tích HTML để lấy thông tin, mình sẽ in ra thông tin page title và image sản phẩm đầu tiên.
+</code></pre>
 
-<pre><code>func main() {
-	var webDriver selenium.WebDriver
-	var err error
+<p>func main() {
+    var webDriver selenium.WebDriver
+    var err error
     // set browser as firefox
-	caps := selenium.Capabilities(map[string]interface{}{&quot;browserName&quot;: &quot;firefox&quot;})
+    caps := selenium.Capabilities(map[string]interface{}{&ldquo;browserName&rdquo;: &ldquo;firefox&rdquo;})
     // remote to selenium server
-	if webDriver, err = selenium.NewRemote(caps, &quot;http://localhost:8081/wd/hub&quot;); err != nil {
-		fmt.Printf(&quot;Failed to open session: %s\n&quot;, err)
-		return
-	}
-	defer webDriver.Quit()
+    if webDriver, err = selenium.NewRemote(caps, &ldquo;<a href="http://localhost:8081/wd/hub&quot;">http://localhost:8081/wd/hub&quot;</a>); err != nil {
+        fmt.Printf(&ldquo;Failed to open session: %s\n&rdquo;, err)
+        return
+    }
+    defer webDriver.Quit()</p>
 
-	err = webDriver.Get(URL_AMAZON_DEAL)
-	if err != nil {
-		fmt.Printf(&quot;Failed to load page: %s\n&quot;, err)
-		return
-	}
-	// sleep for a while for fully loaded javascript
-	time.Sleep(4 * time.Second)
-	// get title
-	if title, err := webDriver.Title(); err == nil {
-		fmt.Printf(&quot;Page title: %s\n&quot;, title)
-	} else {
-		fmt.Printf(&quot;Failed to get page title: %s&quot;, err)
-		return
-	}
+<pre><code>err = webDriver.Get(URL_AMAZON_DEAL)
+if err != nil {
+    fmt.Printf(&quot;Failed to load page: %s\n&quot;, err)
+    return
+}
+// sleep for a while for fully loaded javascript
+time.Sleep(4 * time.Second)
+// get title
+if title, err := webDriver.Title(); err == nil {
+    fmt.Printf(&quot;Page title: %s\n&quot;, title)
+} else {
+    fmt.Printf(&quot;Failed to get page title: %s&quot;, err)
+    return
+}
 
-	var elem selenium.WebElement
-	elem, err = webDriver.FindElement(selenium.ByCSSSelector, &quot;#widgetContent&quot;)
-	if err != nil {
-		fmt.Printf(&quot;Failed to find element: %s\n&quot;, err)
-		return
-	}
+var elem selenium.WebElement
+elem, err = webDriver.FindElement(selenium.ByCSSSelector, &quot;#widgetContent&quot;)
+if err != nil {
+    fmt.Printf(&quot;Failed to find element: %s\n&quot;, err)
+    return
+}
 
-	var firstElem selenium.WebElement
-	firstElem, err = elem.FindElement(selenium.ByCSSSelector, &quot;.a-section .dealContainer&quot;)
-	if err != nil {
-		fmt.Printf(&quot;Failed to find element: %s\n&quot;, err)
-		return
-	}
-    // get image
-	image, err := firstElem.FindElement(selenium.ByCSSSelector, &quot;img&quot;)
-	if err == nil {
-		img, _ := image.GetAttribute(&quot;src&quot;)
-		fmt.Println(img)
-	}
+var firstElem selenium.WebElement
+firstElem, err = elem.FindElement(selenium.ByCSSSelector, &quot;.a-section .dealContainer&quot;)
+if err != nil {
+    fmt.Printf(&quot;Failed to find element: %s\n&quot;, err)
+    return
+}
+// get image
+image, err := firstElem.FindElement(selenium.ByCSSSelector, &quot;img&quot;)
+if err == nil {
+    img, _ := image.GetAttribute(&quot;src&quot;)
+    fmt.Println(img)
 }
 </code></pre>
 
-<p>Chạy code lên chúng ta được</p>
+<p>}
+```
+Chạy code lên chúng ta được</p>
 
 <p><code>Page title: Gold Box Deals | Today's Deals - Amazon.com
 https://images-na.ssl-images-amazon.com/images/I/51eU5JrGAXL._AA210_.jpg</code></p>

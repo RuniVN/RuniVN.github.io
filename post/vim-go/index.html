@@ -57,7 +57,7 @@
         },
         "datePublished": "2015-09-04",
         "description": "",
-        "wordCount":  1567 
+        "wordCount":  1566 
     }
     </script>
     
@@ -82,7 +82,7 @@
 
             <p style="font-size:15px">Mình thích Elixir, idol Rust và code Go hàng ngày.<p>
 <p style="font-size:15px">Mình là Vim user, và hay dùng spacemacs để chơi tetrix.<p>
-<p style="font-size:15px">Mình là Backend Engineer ở <a href="https://www.kakaolabs.com">Kakaolabs</a> cũng là organizer của <a href="https://wwww.facebook.com/golang.org.vn">Golang VietNam.</a><p>
+<p style="font-size:15px">Mình là Engineer Manager ở <a href="https://www.be.xyz">be</a> cũng là organizer của <a href="https://wwww.facebook.com/golang.org.vn">Golang VietNam.</a><p>
 
         </header>
 
@@ -231,93 +231,107 @@ filetype plugin indent on    &quot; required
 
 <p>Để sử dụng Vim như một IDE cho Go, chúng ta cần cài đặt một số plugins cho go.</p>
 
-<p>Quan trọng nhất là <a href="https://github.com/fatih/vim-go/">vim go</a>. Vim go bao gồm tập hợp các thư viện hỗ trợ Go cho vim, ví dụ <code>godef</code>
-   <code>gofmt</code> <code>go test</code></p>
+<p>Quan trọng nhất là <a href="https://github.com/fatih/vim-go/">vim go</a>. Vim go bao gồm tập hợp các thư viện hỗ trợ Go cho vim, ví dụ <code>godef</code></p>
 
-<p>Để cài đặt vim go, các bạn copy plugin vào file .vimrc</p>
+<pre><code class="language-gofmt```">
+   Để cài đặt vim go, các bạn copy plugin vào file .vimrc
 
-<pre><code>   Plugin 'fatih/vim-go'
 </code></pre>
 
-<p>Sau đó vào normal mode bằng cách nhấn <code>Esc</code> và gõ command:</p>
+<p>Plugin &lsquo;fatih/vim-go&rsquo;</p>
 
-<pre><code>   :PluginInstall
+<pre><code>
+   Sau đó vào normal mode bằng cách nhấn ```Esc``` và gõ command:
+
 </code></pre>
 
-<p>Xong, lại tiếp tục gõ command để install Go binaries</p>
+<p>:PluginInstall</p>
 
-<pre><code>    :GoInstallBinaries
+<pre><code>
+   Xong, lại tiếp tục gõ command để install Go binaries
+
 </code></pre>
 
-<p>Chỉ với Vim-go các bạn đã có thể code Go được rồi, nhưng để mọi thứ dễ nhìn hơn cũng như tăng độ hiệu quả, các bạn nên tìm và cài thêm các plugin sau</p>
-
-<pre><code>    ack.vim
-    bclose.vim
-    bufexplorer
-    nerdtree
-    nerdcommenter
-    csapprox
-    vim-fugitive
-    gitv
-    vim-gitgutter
-    syntastic
-    neocomplete.vim
-    neosnippet.vim
-    auto-pairs
+<pre><code>:GoInstallBinaries
 </code></pre>
 
-<p>Trong số này:</p>
+<pre><code>
+   Chỉ với Vim-go các bạn đã có thể code Go được rồi, nhưng để mọi thứ dễ nhìn hơn cũng như tăng độ hiệu quả, các bạn nên tìm và cài thêm các plugin sau
 
-<p>&ndash; nerdtree: Giúp bạn tổ chức folder trong vim dưới dạng cây thư mục, dễ dàng hơn trong việc mở file và folder. Sau khi cài đặt:
-<img src="/post/img/nerdtree.png" class="img-center"></p>
-
-<p>Nhờ plugin của git, các bạn có thể biết file nào đang sửa, thêm mới và chưa được commit.</p>
-
-<p>&ndash; neocomplete: Hỗ trợ auto complete trong vim.
-<img src="/post/img/neocomplete.png" class="img-center"></p>
-
-<p>&ndash; autopair: Plugin giúp bạn gõ nhanh khi sử dụng các dấu &ldquo; ( &lsquo; [ &lt; bằng cách thêm vào thành một pair &ldquo;&rdquo; () &ldquo; [] &lt;&gt;</p>
-
-<h2 id="cơ-chế-mapping-trong-vim">Cơ chế mapping trong Vim</h2>
-
-<p>Vim có một khái niệm là mapping, cho phép người dùng mode lại các tổ hợp phím để phục vụ các mục đích cá nhân.</p>
-
-<pre><code>Khi tôi nhấn key này, tôi muốn bạn làm hành động này thay vì những gì bạn hay thường làm
 </code></pre>
 
-<p>Ví dụ:
-  Gõ vài dòng trên văn bản bằng vim, sau đó chạy command:</p>
-
-<pre><code>:map - x
+<pre><code>ack.vim
+bclose.vim
+bufexplorer
+nerdtree
+nerdcommenter
+csapprox
+vim-fugitive
+gitv
+vim-gitgutter
+syntastic
+neocomplete.vim
+neosnippet.vim
+auto-pairs
 </code></pre>
 
-<p>Đặt con trỏ của bạn lên văn bản và nhấn <code>-</code>. Vim lập tức delete kí tự tại vị trí con trỏ, như là bạn đã nhấn <code>x</code></p>
+<pre><code>  Trong số này:
 
-<p>Lúc này mapping của bạn chỉ có hiệu quả trên file text mà bạn đang edit, để mapping hoạt động trên toàn bộ các file khác, bạn cần đặt mapping vào trong file .vimrc
-Một số loại mapping thường dùng:</p>
+  -- nerdtree: Giúp bạn tổ chức folder trong vim dưới dạng cây thư mục, dễ dàng hơn trong việc mở file và folder. Sau khi cài đặt:
+&lt;img src=&quot;/post/img/nerdtree.png&quot; class=&quot;img-center&quot;&gt;
 
-<pre><code>  nmap    : sử dụng khi ở chế độ normal
+  Nhờ plugin của git, các bạn có thể biết file nào đang sửa, thêm mới và chưa được commit.
+
+  -- neocomplete: Hỗ trợ auto complete trong vim.
+&lt;img src=&quot;/post/img/neocomplete.png&quot; class=&quot;img-center&quot;&gt;
+
+  -- autopair: Plugin giúp bạn gõ nhanh khi sử dụng các dấu &quot; ( ' [ &lt; bằng cách thêm vào thành một pair &quot;&quot; () '' [] &lt;&gt;
+
+## Cơ chế mapping trong Vim
+
+Vim có một khái niệm là mapping, cho phép người dùng mode lại các tổ hợp phím để phục vụ các mục đích cá nhân.
+
+</code></pre>
+
+<p>Khi tôi nhấn key này, tôi muốn bạn làm hành động này thay vì những gì bạn hay thường làm</p>
+
+<pre><code>Ví dụ:
+  Gõ vài dòng trên văn bản bằng vim, sau đó chạy command:
+
+</code></pre>
+
+<p>:map - x</p>
+
+<pre><code>Đặt con trỏ của bạn lên văn bản và nhấn ```-```. Vim lập tức delete kí tự tại vị trí con trỏ, như là bạn đã nhấn ```x```
+
+Lúc này mapping của bạn chỉ có hiệu quả trên file text mà bạn đang edit, để mapping hoạt động trên toàn bộ các file khác, bạn cần đặt mapping vào trong file .vimrc
+Một số loại mapping thường dùng:
+
+</code></pre>
+
+<p>nmap    : sử dụng khi ở chế độ normal
   imap    : sử dụng trong chế độ insert
   vmap    : sử dụng trong chế độ visual
-  noremap : không thể bị override bởi mapping khác
-</code></pre>
+  noremap : không thể bị override bởi mapping khác</p>
 
-<p>Ví dụ, khi code Go chúng ta hay dùng godef để tìm định nghĩa của hàm(biến) đó. Để sử dụng với vim-go chúng ta cần vào normal mode và gõ <code>:GoDef</code>
-Thay vì vậy, mình mapping lại như sau</p>
-
-<pre><code>nnoremap &lt;silent&gt; df :GoDef&lt;cr&gt;
+<pre><code>Ví dụ, khi code Go chúng ta hay dùng godef để tìm định nghĩa của hàm(biến) đó. Để sử dụng với vim-go chúng ta cần vào normal mode và gõ ```:GoDef```
+Thay vì vậy, mình mapping lại như sau
 
 </code></pre>
 
-<p>Có nghĩa là, khi mình ở chế độ normal, ấn tổ hợp df sẽ thực hiện command <code>:GoDef</code>. Map này không bị override bởi bất kì normal map nào khác.
-Như vậy, khi bạn muốn tìm kiếm định nghĩa một hàm hay một biến nào đó, bạn sử dụng tổ hợp phím <code>df</code>. Việc này giảm thiểu quá trình typing đi khá nhiều.</p>
+<p>nnoremap <silent> df :GoDef<cr></p>
 
-<p>Một ví dụ về mapping khác, ví dụ mình hay sử dụng thư viện <a href="https://github.com/k0kubun/pp">print</a> để in ra result ở terminal đẹp hơn. Việc log để debug trong Go diễn ra khá thường xuyên, vì vậy mình đặt một map như sau:</p>
+<pre><code>
+Có nghĩa là, khi mình ở chế độ normal, ấn tổ hợp df sẽ thực hiện command ```:GoDef```. Map này không bị override bởi bất kì normal map nào khác.
+Như vậy, khi bạn muốn tìm kiếm định nghĩa một hàm hay một biến nào đó, bạn sử dụng tổ hợp phím ```df```. Việc này giảm thiểu quá trình typing đi khá nhiều.
 
-<pre><code>inoremap &lt;silent&gt; pp pp.Println(&quot;&quot;)
+Một ví dụ về mapping khác, ví dụ mình hay sử dụng thư viện [print](https://github.com/k0kubun/pp) để in ra result ở terminal đẹp hơn. Việc log để debug trong Go diễn ra khá thường xuyên, vì vậy mình đặt một map như sau:
+
 </code></pre>
 
-<p>Tức là khi mình gõ trong insert mode <code>pp</code> nó sẽ tự chuyển thành <code>pp.Println(&quot;&quot;)</code>, điều này giúp mình code nhanh hơn.</p>
+<p>inoremap <silent> pp pp.Println(&ldquo;&rdquo;)
+<code>
+Tức là khi mình gõ trong insert mode</code>pp<code>nó sẽ tự chuyển thành</code>pp.Println(&ldquo;&rdquo;)```, điều này giúp mình code nhanh hơn.</p>
 
 <p>Các bạn có thể đọc thêm về <a href="http://vimdoc.sourceforge.net/htmldoc/map.html">mapping in vim </a></p>
 
